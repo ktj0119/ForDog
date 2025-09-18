@@ -3,6 +3,8 @@ package com.example.forDog.service;
 import com.example.forDog.dto.ShelterDTO;
 import com.example.forDog.entity.Shelter;
 import com.example.forDog.repository.ShelterRepository;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -78,30 +80,26 @@ public class ShelterService {
     }
 
     // CSV 업로드 처리
-    public void uploadCsv(MultipartFile file) throws IOException {
+    public void uploadCsv(MultipartFile file) throws IOException, CsvValidationException {
         List<Shelter> sheltersToSave = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
-
-            String line;
+        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+            String[] line;
             boolean isFirst = true;
 
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",", -1); // -1: 빈 값 허용
-
+            while ((line = reader.readNext()) != null) {
                 if (isFirst) {
-                    // 첫 줄 첫 컬럼에서 BOM 제거
-                    parts[0] = parts[0].replace("\uFEFF", "");
+                    // 첫 줄에서 BOM 제거
+                    line[0] = line[0].replace("\uFEFF", "");
                     isFirst = false;
                     continue; // 헤더는 건너뜀
                 }
 
-                int no = Integer.parseInt(parts[0].trim());
-                String region = parts[1].trim();
-                String shelterName = parts[2].trim();
-                String phone = parts[3].trim();
-                String address = parts[4].trim();
+                int no = Integer.parseInt(line[0].trim());
+                String region = line[1].trim();
+                String shelterName = line[2].trim();
+                String phone = line[3].trim();
+                String address = line[4].trim();
 
                 Shelter shelter;
                 if (repository.existsById(no)) {
