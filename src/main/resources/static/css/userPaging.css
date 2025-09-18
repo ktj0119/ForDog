@@ -1,0 +1,44 @@
+.pager {
+
+   margin: 30px auto 10px auto;
+   text-align: center;
+}
+
+.pager a {
+    text-decoration: none;
+}
+
+.pager ul {
+   display: flex;
+   justify-content: center;
+}
+
+.pager li {
+   display: block;
+   font-size: 16px;
+   margin: 0 12px;
+   color: var(--text-dark);
+}
+
+.pager-span {
+    color: var(--highlight);
+    text-decoration: underline;
+}
+
+.pager-span:hover {
+    color: var(--highlight-dark);
+    text-decoration: underline;
+}
+
+.active a {
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.pagenumber {
+   color: var(--text-dark);
+}
+
+.pagenumber:hover {
+   text-decoration: underline;
+}

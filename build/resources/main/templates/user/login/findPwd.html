@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 비밀번호 찾기</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userLogin.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <style>
+    .login-container p {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <section class="login-container">
+    <h2>비밀번호 찾기</h2>
+    <p>비밀번호를 찾으려면<br>먼저 이메일 인증을 진행해주세요</p>
+    <input type="email" id="email" name="id" placeholder="이메일을 입력해주세요" required/>
+    <button type="button" id="email-check">인증하기</button>
+    </section>
+</main>
+
+<!-- 모달 배경 -->
+<div id="modal-background"></div>
+
+<!-- 이메일 인증 모달 -->
+<div id="email-modal">
+  <h4>이메일 인증</h4>
+  <p>인증번호를 입력하세요:</p>
+  <input type="text" id="email-code" placeholder="인증번호">
+  <p id="email-modal-message" style="color:red;"></p>
+  <input type="button" id="email-submit" value="확인">
+  <input type="button" id="email-cancel" value="취소">
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<!-- 이메일 인증 스크립트 -->
+<script>
+  const emailInput = document.getElementById('email');
+  const emailCheckBtn = document.getElementById('email-check');
+
+  const modalBackground = document.getElementById('modal-background');
+  const emailModal = document.getElementById('email-modal');
+
+  const emailSubmit = document.getElementById('email-submit');
+  const emailCancel = document.getElementById('email-cancel');
+
+  const emailCode = document.getElementById('email-code');
+  const emailModalMessage = document.getElementById('email-modal-message');
+
+  emailCheckBtn.addEventListener('click', function() {
+    const emailValue = emailInput.value.trim();
+
+    if (!emailValue) {
+      alert("이메일을 입력해주세요.");
+      emailInput.focus();
+      return;
+    }
+
+    if (!emailInput.checkValidity()) {
+      emailInput.reportValidity();
+      emailInput.focus();
+      return;
+    }
+
+    const xhrCheck = new XMLHttpRequest();
+    xhrCheck.open('GET', `/login/registerCheck?id=${encodeURIComponent(emailValue)}`, true);
+    xhrCheck.onreadystatechange = function() {
+      if (xhrCheck.readyState !== 4) return;
+      if (xhrCheck.status !== 200) return;
+
+      const isExist = xhrCheck.responseText.trim() === "true";
+      if (!isExist) {
+        alert("이메일을 확인해주세요.");
+        return;
+      }
+
+      emailModalMessage.textContent = "";
+
+      modalBackground.style.display = "block";
+      emailModal.style.display = "block";
+      emailModalMessage.textContent = "인증번호를 전송 중입니다...";
+      emailCode.value = "";
+      emailModalMessage.style.color = "red";
+      emailCode.focus();
+
+      const xhrMail = new XMLHttpRequest();
+      xhrMail.open("POST", "/mail/send", true);
+      xhrMail.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhrMail.onreadystatechange = function() {
+        if (xhrMail.readyState === 4) {
+          if (xhrMail.status === 200 && xhrMail.responseText === "success") {
+            emailModalMessage.style.color = "green";
+            emailModalMessage.textContent = "인증번호가 전송되었습니다. 이메일을 확인하세요.";
+          } else {
+            emailModalMessage.style.color = "red";
+            emailModalMessage.textContent = "인증번호 전송 실패. 다시 시도해주세요.";
+          }
+        }
+      };
+      xhrMail.send("email=" + encodeURIComponent(emailValue));
+    };
+    xhrCheck.send();
+  });
+
+  emailSubmit.addEventListener('click', function() {
+    const trimEmailCode = emailCode.value.trim();
+
+    if (!trimEmailCode) {
+      emailModalMessage.style.color = "red";
+      emailModalMessage.textContent = "인증번호를 입력해주세요.";
+      return;
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/mail/verify", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        if (xhr.responseText === "true") {
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "/login/pwdChange";
+
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "id";
+          input.value = emailInput.value.trim();
+          form.appendChild(input);
+
+          document.body.appendChild(form);
+          form.submit();
+      } else {
+          emailModalMessage.style.color = "red";
+          emailModalMessage.textContent = "인증번호가 올바르지 않습니다.";
+          emailCode.focus();
+        }
+      }
+    };
+    xhr.send("email=" + encodeURIComponent(emailInput.value) + "&code=" + encodeURIComponent(trimEmailCode));
+  });
+
+  emailCancel.addEventListener('click', function() {
+    modalBackground.style.display = "none";
+    emailModal.style.display = "none";
+    emailModalMessage.textContent = "";
+    emailCode.value = "";
+  });
+</script>
+</body>
+</html>

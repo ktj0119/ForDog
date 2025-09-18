@@ -1,0 +1,170 @@
+body {
+  background-color: var(--hover-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.login-container {
+  width: 400px;
+  margin: 80px auto;
+  padding: 40px 30px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--highlight);
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(216, 123, 71, 0.15);
+  user-select: text;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  color: var(--highlight);
+  font-weight: 700;
+  font-size: 24px;
+  user-select: text;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 14px 12px;
+  margin: 12px 0;
+  border: 1px solid var(--highlight);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: var(--font-main);
+  outline-color: var(--highlight);
+  transition: border-color 0.3s ease;
+  user-select: text;
+}
+
+.login-container input:focus {
+  border-color: var(--highlight-dark);
+  box-shadow: 0 0 8px rgba(216, 123, 71, 0.5);
+}
+
+.login-container button {
+  width: 100%;
+  padding: 14px 0;
+  background-color: var(--highlight);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  margin-top: 10px;
+}
+
+.login-container button:hover {
+  background-color: var(--highlight-dark);
+}
+
+.login-container .sub-links {
+  margin-top: 18px;
+  font-size: 0.9rem;
+  color: #666;
+  user-select: text;
+}
+
+.login-container .sub-links a {
+  text-decoration: none;
+  color: #666;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+  user-select: text;
+}
+
+.login-container .sub-links a:hover {
+  color: var(--highlight);
+}
+
+/* 모달 */
+/* 모달 배경 */
+#modal-background {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+/* 이메일 인증 모달 */
+#email-modal {
+  width: 500px;
+  padding: 25px 30px;
+  display: none;
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+  text-align: center;
+}
+
+#email-modal h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--highlight);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+#email-modal p {
+  margin-bottom: 10px;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+#email-code {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 2px solid #000;
+  margin-bottom: 12px;
+}
+
+#email-submit,
+#email-cancel {
+  width: auto;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 5px;
+}
+
+#email-submit {
+  background-color: var(--highlight);
+  color: white;
+  border: 0;
+}
+
+#email-submit:hover {
+  background-color: var(--highlight-dark);
+}
+
+#email-cancel {
+  background-color: #efefef;
+  border: 0;
+}
+
+#email-cancel:hover {
+  background-color: #ccc;
+}
+
+#email-modal-message {
+  height: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}

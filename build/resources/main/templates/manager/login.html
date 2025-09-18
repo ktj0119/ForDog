@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Login</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+
+</head>
+<body>
+<h1>관리자 로그인</h1>
+<br>
+<!--로그인 폼 추가(TJ)-->
+<form name="form" method="post" action="/manager/loginProc">
+    <div class="id-box">
+    <label>아이디</label>
+    <input type="text" name="id">
+    </div>
+    <br>
+    <div class="pwd-box">
+    <label>비밀번호</label>
+    <input type="password" name="pwd">
+    </div>
+    <br>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button>로그인</button>
+    <button type="button" onclick="location.href='/manager/regist'">회원가입</button>
+
+    <div th:if="${error1}">
+        <script th:inline="javascript">
+            alert([[${error1}]]);
+        </script>
+    </div>
+
+    <div th:if="${error2}">
+        <script th:inline="javascript">
+            alert([[${error2}]]);
+        </script>
+    </div>
+
+    <div th:if="${error3}">
+        <script th:inline="javascript">
+            alert([[${error3}]]);
+        </script>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management MediaVideo</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+    <style>
+        table td {
+            text-align: left;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/contentsAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>미디어 수정</h2>
+            <form id="form" name="form" method="post" th:object="${returnDTO}"
+                  action="/manager/contents/media/sujungProc" enctype="multipart/form-data">
+                <input type="hidden" name="no" th:value="${returnDTO.no}">
+                <div class="vertical-table">
+                <table>
+                    <tr>
+                        <th>미디어그룹</th>
+                        <td>
+                            <select th:field="*{mediaGroup.no}" required>
+                                <option th:each="mediaGroup : ${list}"
+                                        th:value="${mediaGroup.no}"
+                                        th:text="${mediaGroup.name}"
+                                        th:selected="${mediaGroup.no == returnDTO.mediaGroup.no}">
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>제목</th>
+                        <td><input type="text" name="subject" th:value="${returnDTO.subject}" required></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td><textarea name="content" required>[[${returnDTO.content}]]</textarea></td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일</th>
+                        <td>
+                            <input type="file" th:field="*{file}" accept="video/mp4"/>
+                            <div th:if="${returnDTO.url != null}">
+                                현재 파일: <span th:text="${returnDTO.url}"></span>
+                                <input type="hidden" name="url" th:value="${returnDTO.url}"/>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+                <div class="btn-box">
+                    <button type="button" onclick="sujung();">수정</button>
+                    <button type="button" class="btn-cancel"
+                            th:onclick="location.href='/manager/contents/media/view/' + [[${returnDTO.no}]];">
+                        취소
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('form');
+
+    function sujung() {
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            alert('입력되지 않은 정보가 있습니다. 다시 입력해 주세요.');
+        }
+    }
+</script>
+</body>
+</html>

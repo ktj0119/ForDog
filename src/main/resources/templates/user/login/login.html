@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 로그인</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userLogin.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <section class="login-container">
+    <h2>로그인</h2>
+    <form name="form" action="/login/loginProc" method="post">
+      <input type="email" name="id" placeholder="이메일을 입력하세요" required />
+      <input type="password" name="pwd" placeholder="비밀번호를 입력하세요" required />
+      <button type="submit">로그인</button>
+    </form>
+    <div class="sub-links">
+<!--      <a href="/login/findId">아이디 찾기</a> |-->
+      <a href="/login/findPwd">비밀번호 찾기</a> |
+      <a href="/login/terms">회원가입</a>
+    </div>
+  </section>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

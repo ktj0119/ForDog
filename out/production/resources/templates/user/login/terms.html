@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 회원가입 1단계 이용약관 동의</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <style>
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .terms-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      height: 200px;
+      overflow-y: auto;
+      background-color: #fefefe;
+      font-size: 14px;
+    }
+
+    .agreement {
+      margin-top: 20px;
+    }
+
+    .agreement label {
+      display: block;
+      margin: 10px 0;
+    }
+
+    .btn-area {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .btn-area button {
+      padding: 12px 30px;
+      background-color: #ff944d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<section class="container">
+  <h2>회원가입 - 이용약관 동의</h2>
+  <div class="terms-box">
+    <p>이용약관 예시 내용입니다. 실제 서비스에서는 회원의 권리와 의무, 개인정보 수집 및 이용, 서비스 제공 범위 등에 대해 명시해야 합니다.</p>
+    <p>...</p>
+  </div>
+
+  <form action="/login/register" method="get">
+    <div class="agreement">
+      <label><input type="checkbox" required> 이용약관에 동의합니다.</label>
+      <label><input type="checkbox"> 마케팅 수신에 동의합니다. (선택)</label>
+    </div>
+    <div class="btn-area">
+      <button type="submit">다음</button>
+    </div>
+  </form>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const termsCheck = document.querySelector('input[type="checkbox"][required]');
+
+    form.addEventListener("submit", function (e) {
+      if (!termsCheck.checked) {
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Member</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+    <link rel="stylesheet" th:href="@{/css/paging.css}"/>
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+<div class="layout">
+    <div th:replace="manager/layout/memberAside :: asideMenu"></div>
+
+    <div class="content">
+        <div class="content-header">
+            <h2> 회원 관리</h2>
+        </div>
+        <!-- 검색창 -->
+        <form name="cmmnForm" method="get" action="/manager/member/list" class="search-area">
+            <div class="tit">분류</div>
+            <div class="slt_box">
+                <select name="searchType" id="searchType">
+                    <option value="" th:selected="${searchType == null}">전체</option>
+                    <option value="id" th:selected="${searchType == 'id'}">아이디</option>
+                    <option value="name" th:selected="${searchType == 'name'}">이름</option>
+                    <option value="phone" th:selected="${searchType == 'phone'}">전화번호</option>
+                </select>
+            </div>
+            <div class="tit">검색어</div>
+            <div class="input_box">
+                <input name="searchKeyword" id="searchKeyword" placeholder="검색어를 입력하세요." type="text"
+                       th:value="${searchKeyword}">
+            </div>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+            <a class="chuga-button" th:href="@{|/manager/member/chuga|}">
+                <button type="button">+ 회원 추가</button>
+            </a>
+        </form>
+
+        <table>
+            <colgroup>
+                <col style="width: 5%;">
+                <col style="width: 35%;">
+                <col style="width: 20%;">
+                <col style="width: 20%;">
+                <col style="width: 20%;">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>전화번호</th>
+                <th>가입일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 데이터 없을 때 -->
+            <tr th:if="${list.content.size() == 0}">
+                <td colspan="5" style="text-align:center;">등록된 회원이 없습니다.</td>
+            </tr>
+
+            <!-- 데이터 있을 때 -->
+            <tr th:each="memberDTO, iterStat : ${list.content}">
+                <td th:text="${list.pageable.offset + iterStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{|/manager/member/view/${memberDTO.no}|}"
+                       th:text="${memberDTO.id}"></a>
+                </td>
+                <td>[[${memberDTO.name}]]</td>
+                <td>[[${memberDTO.phone}]]</td>
+                <td th:text="${#temporals.format(memberDTO.regiDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 페이징 -->
+        <div th:replace="header/paging :: paging"></div>
+
+    </div>
+</div>
+</body>
+</html>

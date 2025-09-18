@@ -1,0 +1,248 @@
+/* 루트 변수 */
+:root {
+
+  --main-bg: #fff;
+
+  /*
+  --accent: #D99850;
+  --accent-dark: #C18645;
+  --highlight: #d87b47;
+  --highlight-dark: #a05a2c;
+  --text-bright: #fff;
+  --text-dark: #4b4b4b;
+  --hover-bg: #fffaf7;
+  */
+
+  --accent: #DFA316;
+  --accent-dark: #B07F10;
+  --highlight: #694230;
+  --highlight-dark: #4F3225;
+  --text-bright: #fff;
+  --text-dark: #4b4b4b;
+  --hover-bg: #DCD8C8;
+
+  --font-main: 'NanumSquare', sans-serif;
+
+  --header-height: 80px;
+
+}
+
+/* 폰트 설정 */
+@font-face {
+  font-family: 'NanumSquare';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.0/NanumSquare-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  padding-top: calc(var(--header-height) / 2);
+  height: 100%;
+  font-family: var(--font-main);
+  background-color: var(--main-bg);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 90;
+  background-color: var(--main-bg);
+  height: var(--header-height);
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+header:hover {
+  height: calc(var(--header-height) + 160px);
+}
+
+.header-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background-color: transparent;
+}
+
+.logo a {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--highlight);
+}
+
+.logo img {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  gap: 40px;
+}
+
+.menu {
+  position: relative;
+  margin: 0 15px;
+  text-align: center;
+}
+
+.nav-link {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: inherit;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.menu .dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  z-index: 10;
+  padding: 10px 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: normal;
+}
+
+.dropdown a:hover {
+  color: var(--accent);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+}
+
+.login-button {
+  text-decoration: none;
+  color: var(--text-bright);
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 10px 20px;
+  background-color: var(--highlight);
+  margin-left: 10px;
+}
+
+.login-button:hover {
+  background-color: var(--highlight-dark);
+}
+
+header:hover .menu .dropdown {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* 푸터 */
+.site-footer {
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  color: #333;
+  padding: 30px 0 15px;
+}
+
+.footer-container {
+  max-width: 773px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.footer-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.footer-brand h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.footer-brand p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 회사정보 */
+.footer-right {
+  font-size: 13px;
+  line-height: 1.8;
+  max-width: 700px;
+}
+
+.footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px; /* 간격 */
+  margin-bottom: 4px;
+}
+
+.footer-row span {
+  white-space: nowrap;
+}
+
+.footer-right a {
+  color: #1e73be;
+  text-decoration: none;
+}
+
+.footer-right a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 12px;
+  color: #777;
+  margin-top: 20px;
+}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog - 회원탈퇴</title>
+    <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+    <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* 메인 영역 */
+        .mypage-main {
+            flex: 1;
+            background: #fff;
+            padding: 40px;
+            margin: 20px;
+        }
+
+                /* 전체 컨테이너 */
+        .mypage-container {
+            display: flex;
+            max-width: 1200px;
+            min-height: 600px;
+            margin: 40px auto;
+            gap: 30px;
+        }
+
+        .mypage-main h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* 안내 문구 h2 */
+        #deleteForm h2 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        /* 폼 */
+        #deleteForm {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* 체크박스와 라벨 같은 라인 */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* 탈퇴 버튼 */
+        #deleteForm button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--highlight);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #deleteForm button:hover {
+            background: var(--highlight-dark);
+        }
+
+        /* 모달 배경 */
+        #modal-background {
+            display:none;
+            position:fixed;
+            top:0; left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* 탈퇴 모달 */
+        #modal {
+            width: 300px;
+            padding: 20px 30px;
+            display:none;
+            position:fixed;
+            top:50%; left:50%;
+            transform:translate(-50%, -50%);
+            background:white;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            user-select: text;
+            z-index: 1000;
+        }
+
+        #modal p {
+            margin-bottom: 40px;
+            /*color: #d87b47;*/
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        #modal button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #modal-submit {
+            background: var(--highlight);
+            color: #fff;
+        }
+
+        #modal-submit:hover {
+            background: var(--highlight-dark);
+        }
+
+        #modal-cancel {
+            background: #efefef;
+            color: #444;
+        }
+
+        #modal-cancel:hover {
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="mypage-container">
+    <!-- 마이페이지 바 -->
+    <div th:replace="header/userSideBar :: mypageBar"></div>
+
+    <!-- 메인 -->
+    <main class="mypage-main">
+        <h1>회원탈퇴</h1>
+
+        <form id="deleteForm" th:action="@{/mypage/removeProc}" method="post">
+            <h2>회원 탈퇴 시 모든 데이터가 삭제됩니다.</h2>
+
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="agree" required>
+                <label for="agree">탈퇴 내용을 확인하였으며, 삭제에 동의합니다.</label>
+            </div>
+
+            <button type="button" onclick="openModal()">탈퇴하기</button>
+        </form>
+
+        <!-- 모달 배경 -->
+        <div id="modal-background"></div>
+
+        <!-- 모달 -->
+        <div id="modal">
+            <p>정말로 탈퇴하시겠습니까?</p>
+            <button onclick="submitForm()" id="modal-submit">확인</button>
+            <button onclick="closeModal()" id="modal-cancel">취소</button>
+        </div>
+    </main>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<script>
+    function openModal() {
+        if(document.getElementById('agree').checked){
+            document.getElementById('modal-background').style.display = 'block';
+            document.getElementById('modal').style.display = 'block';
+        } else {
+            alert('탈퇴를 위해서는 동의가 필수입니다.');
+        }
+    }
+
+    function closeModal() {
+    document.getElementById('modal-background').style.display = 'none';
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    function submitForm() {
+        document.getElementById('deleteForm').submit();
+    }
+</script>
+</body>
+</html>

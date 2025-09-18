@@ -1,0 +1,36 @@
+.pager {
+       width: 50%;
+       margin: 20px auto;
+       text-align: center;
+   }
+
+.pager ul {
+   width: 60%;
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   margin: auto;
+}
+
+.pager li {
+   display: block;
+   font-size: 1.3em;
+   color: #5c5248;
+   width: 15%;
+}
+
+.active a {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.pagenumber {
+   padding: 0 15%;
+   text-decoration: none;
+
+}
+
+.pagenumber:hover {
+   color: #1f4d80;
+   text-decoration: underline;
+}

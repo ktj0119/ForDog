@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 비밀번호 재설정</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <style>
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff944d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .success-message {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="container">
+  <h2>비밀번호 재설정</h2>
+  <input type="password" placeholder="새 비밀번호 입력">
+  <input type="password" placeholder="비밀번호 확인">
+  <button>변경</button>
+
+  <div class="success-message">
+    비밀번호 변경이 완료되었습니다. <a href="/login.html">로그인하기</a>
+  </div>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

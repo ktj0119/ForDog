@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>ForDog - 회원가입 완료</title>
+    <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+    <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <style>
+        body {
+          background-color: var(--hover-bg);
+        }
+
+        .round-container {
+          max-width: 600px;
+          margin: 100px auto;
+          padding: 40px 30px;
+          text-align: center;
+          user-select: text;
+        }
+
+        .icon {
+          font-size: 50px;
+          color: var(--highlight);
+          margin-bottom: 25px;
+          user-select: none;
+        }
+
+        .description {
+          font-size: 18px;
+          margin-bottom: 30px;
+          color: #5a3d1b;
+          user-select: text;
+          line-height: 1.6;
+        }
+
+        .btn {
+          display: inline-block;
+          padding: 12px 34px;
+          background-color: var(--highlight);
+          color: white;
+          text-decoration: none;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          transition: background-color 0.3s ease;
+          user-select: none;
+        }
+
+        .btn:hover {
+          background-color: var(--highlight-dark);
+        }
+
+        .round-container h1 {
+          font-size: 28px;
+        }
+
+        .round-container p {
+          font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+    <div class="round-container">
+        <div class="icon">🎉</div>
+        <h1>회원가입이 완료되었습니다!</h1>
+        <p class="description">이제 로그인 후 다양한 서비스를 이용하실 수 있습니다.</p>
+        <a href="/login/" class="btn">로그인 하러 가기</a>
+    </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

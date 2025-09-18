@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Shelter</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+    <link rel="stylesheet" th:href="@{/css/paging.css}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+<div class="layout">
+    <div th:replace="manager/layout/homepageAside :: asideMenu"></div>
+
+    <div class="content">
+        <!-- 타이틀 + 버튼 영역 -->
+        <div class="content-header">
+            <h2> 보호소 관리</h2>
+        </div>
+        <!-- 검색창 -->
+        <form name="cmmnForm" method="get" action="/manager/homepage/shelter/list" class="search-area" style="gap:0;">
+            <div class="tit">시/도</div>
+            <div class="slt_box">
+                <select name="searchType" id="searchType" style="width:300px;">
+                    <option value="" th:selected="${searchType == null}">전체</option>
+                    <option value="서울특별시" th:selected="${searchType == '서울특별시'}">서울특별시</option>
+                    <option value="부산광역시" th:selected="${searchType == '부산광역시'}">부산광역시</option>
+                    <option value="대구광역시" th:selected="${searchType == '대구광역시'}">대구광역시</option>
+                    <option value="인천광역시" th:selected="${searchType == '인천광역시'}">인천광역시</option>
+                    <option value="광주광역시" th:selected="${searchType == '광주광역시'}">광주광역시</option>
+                    <option value="대전광역시" th:selected="${searchType == '대전광역시'}">대전광역시</option>
+                    <option value="울산광역시" th:selected="${searchType == '울산광역시'}">울산광역시</option>
+                    <option value="세종특별자치시" th:selected="${searchType == '세종특별자치시'}">세종특별자치시</option>
+                    <option value="경기도" th:selected="${searchType == '경기도'}">경기도</option>
+                    <option value="강원특별자치도" th:selected="${searchType == '강원특별자치도'}">강원특별자치도</option>
+                    <option value="충청북도" th:selected="${searchType == '충청북도'}">충청북도</option>
+                    <option value="충청남도" th:selected="${searchType == '충청남도'}">충청남도</option>
+                    <option value="전북특별자치도" th:selected="${searchType == '전북특별자치도'}">전북특별자치도</option>
+                    <option value="전라남도" th:selected="${searchType == '전라남도'}">전라남도</option>
+                    <option value="경상북도" th:selected="${searchType == '경상북도'}">경상북도</option>
+                    <option value="경상남도" th:selected="${searchType == '경상남도'}">경상남도</option>
+                    <option value="제주특별자치도" th:selected="${searchType == '제주특별자치도'}">제주특별자치도</option>
+                </select>
+            </div>
+            <div class="tit">센터명</div>
+            <div class="input_box">
+                <input name="searchKeyword" id="searchKeyword" placeholder="검색어를 입력하세요." type="text"
+                       th:value="${searchKeyword}" style="width:300px;">
+            </div>
+            <button type=" submit"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+                <a th:href="@{|/manager/homepage/shelter/chuga|}">
+                    <button type="button">+ 보호소 추가</button>
+                </a>
+        </form>
+
+        <br>
+        <div class="csv-load">
+            <span>※ 다운로드 한 파일에 목록을 수정한 후 업로드</span>
+            <!-- CSV 업로드 폼 -->
+            <form id="uploadForm" method="post" action="/manager/homepage/shelter/upload" enctype="multipart/form-data">
+                <label class="input_file_btn" for="csvFileUp">
+                    <span class="material-symbols-outlined">upload</span> 목록 업로드
+                </label>
+                <input type="file" id="csvFileUp" name="file" accept=".csv" required style="display: none;"/>
+            </form>
+
+            <!-- CSV 다운로드 버튼 -->
+            <button type="button" class="input_file_btn" onclick="window.location.href='/manager/homepage/shelter/download'">
+                <span class="material-symbols-outlined">download</span> 목록 다운로드
+            </button>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>보호센터명</th>
+                <th>관할구역</th>
+                <th>전화번호</th>
+                <th>주소</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 데이터 없을 때 -->
+            <tr th:if="${list.content.size() == 0}">
+                <td colspan="5" style="text-align:center;">등록된 자료가 없습니다.</td>
+            </tr>
+            <!-- 데이터 있을 때 -->
+            <tr th:each="shelterDTO, iterStat : ${list.content}">
+                <!-- 전체 번호 계산: 페이지 첫 항목 번호 + 현재 항목 번호 -->
+                <td th:text="${list.pageable.offset + iterStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{|/manager/homepage/shelter/view/${shelterDTO.no}|}"
+                       th:text="${shelterDTO.shelterName}"></a>
+                </td>
+                <td th:text="${shelterDTO.region}"></td>
+                <td th:text="${shelterDTO.phone}"></td>
+                <td th:text="${shelterDTO.address}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 페이징 -->
+        <div th:replace="header/paging :: paging"></div>
+
+    </div>
+</div>
+<script>
+    // 업로드 input
+    const uploadInput = document.getElementById('csvFileUp');
+    const uploadForm = document.getElementById('uploadForm');
+
+    if (uploadInput) {
+        uploadInput.addEventListener('change', function () {
+            if (uploadInput.files.length > 0) {
+                uploadForm.submit();
+            }
+        });
+    }
+
+    // 업로드 성공 시 알림
+    const urlParams = new URLSearchParams(window.location.search);
+    const uploaded = urlParams.get("uploaded");
+
+    if (uploaded === "true") {
+        alert("CSV 업로드가 완료되었습니다.");
+        history.replaceState(null, "", window.location.pathname);
+
+        // 알림 후 URL 정리 (파라미터 제거)
+        history.replaceState(null, "", window.location.pathname);
+    }
+
+</script>
+<th:block layout:fragment="script"></th:block>
+</body>
+
+</html>

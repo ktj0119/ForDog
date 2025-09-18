@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog - 미디어 강의시청</title>
+    <style>
+        :root {
+          --accent: #DFA316;
+          --accent-dark: #B07F10;
+          --highlight: #694230;
+          --highlight-dark: #4F3225;
+          --text-bright: #fff;
+          --text-dark: #4b4b4b;
+          --hover-bg: #F7f6f0;
+        }
+
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 20px;
+          background-color: #fff;
+          color: var(--text:dark);
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+
+        *, *::before, *::after {
+          box-sizing: inherit;
+        }
+
+        .container-media {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          margin: 0 auto;
+        }
+
+        h1 {
+          font-size: 28px;
+          color: var(--highlight);
+          margin-bottom: 20px;
+        }
+
+        h2 {
+          color: var(--highlight);
+          font-size: 24px;
+          margin-bottom: 24px;
+        }
+
+        /* 비디오 영역 */
+        .video-box {
+          flex: 1 1 70%;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          padding: 0 20px;
+        }
+
+        .video-card {
+          flex-grow: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+          border-radius: 12px;
+        }
+
+        .video-card video {
+          width: 100%;
+          height: 100%;
+          border-radius: 8px;
+          object-fit: contain;
+        }
+
+        /* 목록 영역 */
+        .list-box {
+          flex: 1 1 30%;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          border-left: 1px solid rgba(0, 0, 0, 0.1);
+          padding: 0 20px;
+          background: #fff;
+        }
+
+        .list-box > div:nth-child(2) {
+          flex-grow: 1;
+          overflow-y: auto;
+        }
+
+        .list-box form {
+          margin-bottom: 10px;
+          padding: 10px;
+          border-radius: 8px;
+          background: var(--hover-bg);
+          transition: background-color 0.25s ease;
+          cursor: pointer;
+        }
+
+        .list-box form:hover {
+          font-weight: bold;
+        }
+
+        .list-box p {
+          font-size: 16px;
+          margin: 0;
+        }
+
+        /* 진행바 */
+        .process-bar {
+          height: 6px;
+          background: var(--accent);
+          border-radius: 3px;
+          overflow: hidden;
+          margin: 5px 0 10px;
+        }
+
+        .process-fill {
+          height: 100%;
+          background: var(--highlight);
+          border-radius: 3px;
+          width: 0%;
+          transition: width 1s linear;
+        }
+
+        /* 버튼 */
+        .list-box > div:last-child {
+          display: flex;
+          gap: 10px;
+          justify-content: flex-end;
+          margin-top: 10px;
+        }
+
+        .list-box button {
+          padding: 10px 20px;
+          border: none;
+          border-radius: 25px;
+          font-weight: bold;
+          cursor: pointer;
+          font-size: 14px;
+          transition: all 0.25s ease;
+        }
+
+        #examButton {
+          background-color: var(--highlight);
+          color: white;
+        }
+
+        #examButton:hover {
+          background-color: var(--highlight-dark);
+        }
+
+        .list-box button:last-child {
+          background-color: #efefef;
+          color: var(--text-dark);
+        }
+
+        .list-box button:last-child:hover {
+          background-color: var(--text:dark);
+        }
+    </style>
+</head>
+<body>
+<div class="container-media">
+    <div class="video-box">
+        <div class="subject">
+            <h1>[[${mediaVideoDTO.subject}]]</h1>
+        </div>
+        <div class="video">
+            <div class="video-card">
+                <input type="hidden" id="mediaGroupNo" th:value="${mediaGroupDTO.no}"/>
+                <input type="hidden" id="mediaVideoNo" th:value="${mediaVideoDTO.no}"/>
+                <video id="video"
+                       th:src="@{/edu/media/video(groupName=${mediaGroupDTO.name}, fileName=${mediaVideoDTO.url})}"
+                       controls
+                       th:data-initial-playtime="${mediaVideoProcessDTO != null} ? ${mediaVideoProcessDTO.playTime} : 0"
+                       th:data-video-length="${mediaVideoDTO.mediaLength}">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-box">
+        <div>
+            <h2>[[${mediaGroupDTO.name}]] (이수율 <span id="completionRate" th:text="${completionRate} + '%'">0%</span>)</h2>
+        </div>
+        <div>
+            <div th:each="mediaVideoDTO, loop : ${mediaVideoList}">
+                <form th:id="|form${loop.index}|" method="post" th:action="|/edu/media/video/${mediaGroupDTO.no}|">
+                    <div th:onclick="|formSubmit('form${loop.index}')|" style="cursor:pointer;">
+                        <input type="hidden" name="no" th:value="${mediaVideoDTO.no}"/>
+                        <p>[[${mediaVideoDTO.subject}]]</p>
+                        <div th:id="|processBar${mediaVideoDTO.no}|" class="process-bar">
+                            <div class="process-fill"
+                                 th:style="'width:' + (${allMediaProcess[__${loop.index}__].playTime * 100 / mediaVideoDTO.mediaLength}) + '%'">
+                            </div>
+                        </div>
+                        <div>
+                            <span th:id="|displayPlayTime${mediaVideoDTO.no}|"
+                                  th:attr="data-playtime=${allMediaProcess[__${loop.index}__].playTime}">00:00</span>
+                            <span> / </span>
+                            <span th:id="|displayTotalTime${mediaVideoDTO.no}|"
+                                  th:attr="data-totaltime=${mediaVideoDTO.mediaLength}">00:00</span>
+                        </div>
+                        <p th:id="|processStatus${mediaVideoDTO.no}|"
+                           th:text="${allMediaProcess[__${loop.index}__].playTime ge mediaVideoDTO.mediaLength}
+                           ? '학습완료' : (${allMediaProcess[__${loop.index}__].playTime > 0} ? '학습중' : '')"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <button id="examButton" th:onclick="|location.href='/edu/media/test/${mediaGroupDTO.no}'|"
+                    style="display: none;">시험보기</button>
+            <button onclick="window.close()">나가기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function formSubmit(formId) {
+      document.getElementById(formId).submit();
+    }
+</script>
+
+<!-- 비동기 방식 : 동영상 진행도 저장 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const video = document.getElementById('video');
+        const mediaGroupNo = document.getElementById('mediaGroupNo').value;
+        const mediaVideoNo = document.getElementById('mediaVideoNo').value;
+
+        let initialPlayTime = parseInt(video.dataset.initialPlaytime, 10);
+        const videoLength = parseInt(video.dataset.videoLength, 10); // 10진법
+
+        // DOMContentLoaded에서 제공하는 비디오 현재 시간
+        video.currentTime = initialPlayTime;
+
+        // 같은 playTime 중복 저장 방지
+        let saveTime = -1;
+
+        let isSeeking = false;
+
+        // 동영상 시크바 제한
+        video.addEventListener('seeking', function() {
+            isSeeking = true;
+
+            if (video.currentTime > initialPlayTime) {
+                video.currentTime = initialPlayTime;
+            }
+
+        });
+
+        video.addEventListener('seeked', function() {
+            isSeeking = false;
+        });
+
+        const examButton = document.getElementById('examButton');
+        const rateElem = document.getElementById('completionRate');
+        const isCompleted = [[${alreadyCompleted} ? 'true' : 'false']];
+
+        if (examButton && rateElem) {
+            const rate = parseInt(rateElem.textContent.replace('%',''), 10);
+            if (rate >= 100 && !isCompleted) {
+                examButton.style.display = 'inline-block';
+            } else {
+                examButton.style.display = 'none';
+            }
+        }
+
+        video.addEventListener('timeupdate', function() {
+            const currentPlayTime = Math.floor(video.currentTime);
+            if (isSeeking) {
+                return;
+            }
+
+            // 진행도 저장
+            if ((currentPlayTime > initialPlayTime) && (currentPlayTime - initialPlayTime) < 2
+            && currentPlayTime != saveTime) {
+                saveTime = currentPlayTime;
+
+                fetch('/edu/media/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        member: { no: 0 },
+                        playTime: currentPlayTime,
+                        mediaVideo: {
+                            no: parseInt(mediaVideoNo),
+                            mediaGroup: {
+                                no: parseInt(mediaGroupNo)
+                            }
+                        }
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('동영상 진행도 저장 실패');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    initialPlayTime = currentPlayTime;
+
+                    // 진행도 시간 바
+                    const processPercent = (currentPlayTime / videoLength) * 100;
+                    const processBar = document.getElementById('processBar' + mediaVideoNo);
+                    if (processBar) {
+                        const processFill = processBar.querySelector('.process-fill');
+                        if (processFill) {
+                            processFill.style.width = processPercent + '%';
+                        }
+                    }
+
+                    const playTimeElem = document.getElementById('displayPlayTime' + mediaVideoNo);
+                    if (playTimeElem) {
+                        playTimeElem.textContent = formatTime(currentPlayTime);
+                    }
+
+                    // 전체 이수율
+                    const rateElem = document.getElementById('completionRate');
+                    if (rateElem) {
+                        rateElem.textContent = data.completionRate + '%';
+                    }
+
+                    // 동영상 상태
+                    const processStatusElem = document.getElementById('processStatus' + mediaVideoNo);
+
+                    if (processStatusElem) {
+                        if (currentPlayTime === 0) {
+                            processStatusElem.textContent = '';
+                        } else if (currentPlayTime < videoLength) {
+                            processStatusElem.textContent = '학습중';
+                        } else {
+                            processStatusElem.textContent = '학습완료';
+                        }
+                    }
+
+                    // 시험 버튼 진행도와 수료여부에 따라 활성화
+                    const examButton = document.getElementById('examButton');
+                    const isCompleted = [[${alreadyCompleted} ? 'true' : 'false']];
+
+                    if (examButton && rateElem) {
+                        const rate = parseInt(rateElem.textContent.replace('%', ''), 10);
+                        if (rate >= 100 && !isCompleted) {
+                            examButton.style.display = 'inline-block';
+                        } else {
+                            examButton.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('네트워크 오류:', error);
+                });
+            }
+        });
+    });
+</script>
+
+<!-- 시간 형식 -->
+<script>
+    function formatTime(seconds) {
+        seconds = Number(seconds);
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+
+        const hh = h > 0 ? String(h).padStart(2, '0') + ':' : '';
+        const mm = String(m).padStart(2, '0');
+        const ss = String(s).padStart(2, '0');
+
+        return hh + mm + ':' + ss;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const playTimeElements = document.querySelectorAll('[id^="displayPlayTime"]');
+        for (let i = 0; i < playTimeElements.length; i++) {
+            const element = playTimeElements[i];
+            const playTime = element.getAttribute('data-playtime');
+            element.textContent = formatTime(playTime);
+        }
+
+        const totalTimeElements = document.querySelectorAll('[id^="displayTotalTime"]');
+        for (let i = 0; i < totalTimeElements.length; i++) {
+            const element = totalTimeElements[i];
+            const totalTime = element.getAttribute('data-totaltime');
+            element.textContent = formatTime(totalTime);
+        }
+    });
+</script>
+</body>
+</html>

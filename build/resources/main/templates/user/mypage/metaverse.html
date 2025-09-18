@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 메타버스 활동 현황</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    h2 {
+        margin-bottom: 30px !important;
+    }
+
+.metaverse-item {
+position: relative;
+background: #fff;
+border-radius: 12px;
+padding: 20px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+margin-bottom: 30px;
+}
+
+.metaverse-item h2 {
+margin-bottom: 15px;
+}
+
+.metaverse-progress {
+display: flex;
+flex-direction: column; /* 세로 배치 */
+width: 100%;
+padding: 30px;
+}
+
+.home {
+position: absolute;
+right: 6%;
+top: 120px;
+width: 60px;
+height: 60px;
+display: block;
+}
+
+
+/* process-bar 안 아이템 가로 정렬 */
+.process-bar {
+margin-top: 80px;
+display: flex;
+align-items: center;
+position: relative;
+gap: 10px; /* 원 사이 간격 */
+}
+
+/* 각 원형 + 글자 묶음 */
+.process-bar > div {
+position: relative;
+flex: 1;
+display: flex;
+flex-direction: column; /* 원형 위/아래 세로 배치 */
+align-items: center;
+width: 20px;
+}
+
+/* 원형 */
+.circle {
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background-color: #ccc;
+transition: background-color 0.3s;
+}
+
+/* 각 원형 아이템 앞에 선 생성, 첫 아이템 제외 */
+.process-bar > div::after {
+content: '';
+position: absolute;
+top: 25%;
+right: 50%;           /* 왼쪽으로 뻗음 */
+height: 4px;
+background-color: #ccc;
+width: 100%;
+transform: translateY(-50%);
+z-index: 0;
+}
+
+.process-bar > div:first-child::after {
+content: none;
+}
+
+/* 활성화된 원 */
+.process-bar > div.active .circle {
+background-color: var(--highlight); /* 메인 색상 */
+}
+
+/* 활성화된 선 */
+.process-bar > div.active::after {
+background-color: var(--highlight); /* 메인 색상 */
+}
+
+/* 원형 아래 글자 */
+.sceneName {
+margin-top: 5px;
+text-align: center;
+font-size: 12px;
+font-weight: bold;
+}
+
+.dog {
+position: absolute;
+top: -55px;   /* 원 위로 띄우기 */
+font-size: 40px;
+transform: scaleX(-1); /* 반대 방향으로 보기 원하면 */
+}
+
+.heart{
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  top: -70px;
+  right: 65px;
+}
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: mypageBar"></div>
+
+  <!-- 메인 -->
+  <div class="container">
+    <h2>메타버스 활동 현황</h2>
+
+    <div class="metaverse-item" th:each="metaverseName, metaverseNameLoop : ${metaverseNameList}">
+      <h3>[[${metaverseName}]] 진행 현황</h3>
+
+      <div class="metaverse-progress">
+
+        <div th:if="${metaverseNameLoop.index == 0}">
+          <img class="home" src="/img/doghouse.png" alt="강아지 집 아이콘"/>
+          <div class="line"></div>
+          <div class="process-bar">
+            <div th:each="daheeScene, index : ${daheeSceneList}"
+                 th:classappend="${index.index} < ${daheeProcessStage} ? 'active' : ''">
+              <img class="heart" src="/img/dogheart.png" alt="하트"
+                   th:if="${index.index + 1 == #lists.size(daheeSceneList) and daheeProcessStage == #lists.size(daheeSceneList)}">
+              <div class="dog" th:if="${index.index + 1 == daheeProcessStage}">🐕</div>
+              <div class="circle"></div>
+              <div class="sceneName">[[${daheeScene}]]</div>
+            </div>
+          </div>
+        </div>
+
+        <div th:if="${metaverseNameLoop.index == 1}">
+          <img class="home" src="/img/doghouse.png" alt="강아지 집 아이콘"/>
+          <div class="line"></div>
+          <div class="process-bar">
+            <div th:each="haechanScene, index : ${haechanSceneList}"
+                 th:classappend="${index.index} < ${haechanProcessStage} ? 'active' : ''">
+              <img class="heart" src="/img/dogheart.png" alt="하트"
+                   th:if="${index.index + 1 == #lists.size(haechanSceneList) and haechanProcessStage == #lists.size(haechanSceneList)}">
+              <div class="dog" th:if="${index.index + 1 == haechanProcessStage}">🐕</div>
+              <div class="circle"></div>
+              <div class="sceneName">[[${haechanScene}]]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

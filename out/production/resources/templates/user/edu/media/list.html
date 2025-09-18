@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 미디어 자료</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <style>
+    .container {
+      max-width: 960px;
+      margin: 80px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .slider {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      scroll-behavior: smooth;
+    }
+
+    .video-card {
+      flex: 0 0 auto;
+      width: 300px;
+      background: #fefefe;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .video-card video {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    .video-title {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="container">
+  <h1>미디어 자료</h1>
+  <div class="slider">
+    <div class="video-card">
+      <video src="video1.mp4" controls></video>
+      <div class="video-title">동영상 1</div>
+    </div>
+    <div class="video-card">
+      <video src="video2.mp4" controls></video>
+      <div class="video-title">동영상 2</div>
+    </div>
+    <div class="video-card">
+      <video src="video3.mp4" controls></video>
+      <div class="video-title">동영상 3</div>
+    </div>
+    <div class="video-card">
+      <video src="video4.mp4" controls></video>
+      <div class="video-title">동영상 4</div>
+    </div>
+    <div class="video-card">
+      <video src="video5.mp4" controls></video>
+      <div class="video-title">동영상 5</div>
+    </div>
+  </div>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

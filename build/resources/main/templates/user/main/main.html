@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ForDog - 메인</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <style>
+    /* 인트로 로딩 애니메이션 */
+    .intro {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      background-color: var(--highlight);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      z-index: 9999;
+      animation: fadeOut 2s ease 2s forwards;
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* 히어로 섹션 */
+    .hero, .hero-slider {
+      height: 90vh;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero {
+      background: url('https://images.unsplash.com/photo-1558788353-f76d92427f16') no-repeat center/cover;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    }
+    .hero-slide {
+      position: absolute; top: 0;
+      width: 100%; height: 100%;
+      background-size: cover; background-position: center;
+      opacity: 0; transition: opacity 1s ease-in-out;
+      display: flex; align-items: center; justify-content: center;
+      color: white; text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+      background-size: 100% auto;  가로 크기만 크게
+      background-size: auto 80%;   세로 크기만 줄이기
+       background-position: center 80%;
+    }
+    .hero-slide.active { opacity: 1; z-index: 1; }
+    .hero-text h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+    .hero-text p { font-size: 1.5rem; }
+
+    /* 섹션 공통 스타일 */
+    section {
+      padding: 80px -1px;
+      margin: auto;
+    }
+
+    /* 페이드 인 애니메이션 */
+    .fade-section {
+      opacity: 0; transform: translateY(50px);
+      transition: all 1s ease;
+
+    }
+    .fade-section.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* 입양 전후 이야기 카드 */
+    .story-container {
+      display: flex; gap: 20px; justify-content: center;
+      flex-wrap: wrap;
+    }
+    .story-card {
+      background: #fff;
+      border: 2px solid var(--highlight);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 373px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .story-card img { width: 100%; display: block; }
+    .story-card h3 {
+      margin: 0; padding: 15px 20px 0;
+      font-size: 1.2em; color: var(--highlight);
+    }
+    .story-card p {
+      padding: 0 20px 20px;
+      font-size: 0.95em; line-height: 1.5;
+    }
+    .fade-section p.source {
+      text-align: center; margin-top: 20px;
+      font-style: italic; font-size: 0.9em;
+      color: var(--text-dark);
+    }
+
+/* CSS */
+.menu-section {
+width: 100%;
+/* 섹션 전체 배경 (브라우저 좌우 꽉 차게) */
+background-image: url('/img/bg_02.jpg');
+background-repeat: no-repeat;
+background-position: center top;   /* 필요하면 left top / right top으로 변경 */
+background-size: cover;            /* 핵심: 좌우 꽉 채우기 */
+position: relative;                /* 절대위치 이미지를 기준으로 삼기 위함 */
+padding: 100px 300px;                /* 섹션 위아래 여백 */
+box-sizing: border-box;
+overflow: visible;                 /* 캐릭터가 섹션 바깥으로 삐져나와도 보이게 */
+}
+
+/* 내부 컨텐츠 폭 제한(가운데 정렬) */
+.menu-section .container {
+max-width: 1200px;
+margin: 0 auto;
+}
+
+/* 타이틀 중앙 정렬 */
+.menu-title {
+text-align: center;
+font-size: 24px;
+font-weight: 700;
+color: #2f2f2f;
+margin-bottom: 36px;
+}
+
+/* 카드 컨테이너(내부) */
+.card-container {
+display: flex;
+justify-content: center;
+gap: 30px;
+flex-wrap: wrap;
+}
+
+/* 카드 스타일 */
+.card {
+background: #fff;
+border-radius: 16px;
+padding: 50px 50px;
+text-align: center;
+box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+position: relative;
+
+}
+
+.card-title {
+font-size: 18px;
+margin-bottom: 18px;
+color: #333;
+}
+
+/* 버튼 */
+.menu-btn {
+background: #d87b47;
+color: #fff;
+border: none;
+padding: 10px 18px;
+border-radius: 10px;
+cursor: pointer;
+}
+.menu-btn:hover { background: #b86434; }
+
+/* 캐릭터 이미지(절대 배치) */
+.menu-char {
+position: absolute;
+z-index: 1; /* 카드보다 아래에 보이도록 필요하면 3으로 조정 */
+width: 160px; /* 기본 크기 */
+height: auto;
+pointer-events: none; /* 클릭 방해하지 않음 */
+user-select: none;
+}
+
+/* 왼쪽 캐릭터: 섹션 왼쪽 바깥쪽 상단 쪽에 붙여 표시 */
+.menu-char.left-char {
+width: 400px;
+left: 40px;       /* 왼쪽에서 얼마나 떨어질지 */
+top: 260px;        /* 섹션 상단에서의 위치 */
+transform: translateY(-10%); /* 미세 위치 보정 */
+}
+
+/* 오른쪽 캐릭터: 섹션 오른쪽 바깥쪽 상단 쪽에 붙여 표시 */
+.menu-char.right-char {
+right: 40px;
+top: -104px;
+transform: translateY(-5%);
+}
+
+/* 필요하면 왼쪽 캐릭터를 좌우 반전하려면 아래 주석 해제
+.menu-char.right-char { transform: scaleX(-1); }
+*/
+
+/* 반응형: 모바일에서 캐릭터 크기/위치 조정 및 숨김 옵션 */
+@media (max-width: 900px) {
+.menu-char { width: 120px; }
+.menu-char.left-char { left: 16px; top: 6px; transform: none; }
+.menu-char.right-char { right: 16px; top: 6px; transform: none; }
+.card { width: calc(50% - 24px); padding: 24px 12px; }
+}
+
+@media (max-width: 580px) {
+/* 모바일에서는 캐릭터를 숨기면 카드 레이아웃이 더 깔끔 */
+.menu-char { display: none; }
+.card { width: 100%; max-width: 420px; margin: 0 auto; }
+.menu-section { padding: 40px 10px; background-position: center top; }
+}
+
+
+
+    /* 협력업체 섹션 + 배너 배경 */
+.partners-section {
+text-align: center;
+padding: 200px 20px;
+background-image: url('/img/bg_03.jpg');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+}
+
+/* 로고 슬라이더 */
+.partners-section .partner-slider {
+display: flex;
+gap: 30px;
+justify-content: center;
+flex-wrap: wrap;
+align-items: center;
+position: relative; /* 배경 위로 표시 */
+z-index: 2;
+}
+
+/* 로고 이미지 */
+.partners-section .partner-slider a img {
+height: 80px;
+object-fit: contain;
+border-radius: 8px;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.partners-section .partner-slider a:hover img {
+transform: scale(1.1);
+box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.notice-section {
+position: relative;             /* 배경 이미지 절대 위치 기준 */
+padding: 60px 20px;
+overflow: hidden;               /* 이미지가 넘치더라도 깔끔하게 */
+}
+
+.notice-section .notice-bg-img {
+position: absolute;
+top: 65%;                       /* 섹션 중간 기준 */
+right: 134px;                        /* 오른쪽 정렬 */
+transform: translateY(-50%);
+z-index: 1;                      /* 카드보다 뒤쪽 */
+width: 150px;
+height: auto;
+object-fit: contain;
+}
+
+.notice-section .notice-bg-img.second {
+top: 32%;                        /* 두 번째 이미지는 위치 살짝 조정 */
+right: 193px;
+}
+
+.notice-section .card-container {
+position: relative;              /* 배경 위로 표시 */
+z-index: 2;
+}
+
+.notice-section .notice-bg-img {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(20%) saturate(500%) hue-rotate(350deg) brightness(90%);
+opacity: 0.8; /* 살짝 투명도 줘서 자연스럽게 */
+}
+
+    /* 챗봇 아이콘 */
+    #chatbot-icon {
+      position: fixed; bottom: 24px; right: 24px;
+      background-color: var(--accent); color: white;
+      padding: 14px 16px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer; z-index: 999;
+    }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .event-list, .review-section div, .partner-slider {
+        flex-direction: column;
+        align-items: center;
+      }
+      .partner-slider { overflow-x: hidden; }
+    }
+
+    .middle-banner {
+width: 100%;
+margin: 50px 0;         /* 위아래 간격 */
+text-align: center;
+}
+
+.middle-banner img {
+width: 100%;            /* 양옆 꽉 차게 */
+max-height: 350px;      /* 원하는 높이 제한 */
+object-fit: cover;      /* 화면 채우면서 비율 유지 */
+}
+
+  .photo-slider {
+width: 100%;
+overflow: hidden;
+position: relative;
+}
+
+.photo-slider .slide-track {
+display: flex;
+width: calc(250px * 14); /* 이미지(7장) × 2 세트 = 14 */
+animation: scroll 40s linear infinite;
+}
+
+.photo-slider img {
+width: 250px;
+height: 250px;
+object-fit: cover;
+border-radius: 12px;
+margin: 0 10px;
+}
+
+@keyframes scroll {
+0%   { transform: translateX(0); }
+100% { transform: translateX(calc(-250px * 7)); } /* 원본 7장의 길이만큼 이동 */
+}
+  </style>
+</head>
+
+<body>
+<!-- 헤더 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 인트로 -->
+<div id="intro" class="intro">Welcome to ForDog</div>
+
+<!-- 히어로 -->
+<div class="hero-slider fade-section">
+  <div class="hero-slide active" style="background-image:url('img/ChatGPT Image 05_22_11.png');">
+    <div class="hero-text">
+    </div>
+  </div>
+  <div class="hero-slide" style="background-image:url('img/86252623792db7d4a432f66e3acc3447_1706850456_9391.jpg');">
+    <div class="hero-text"><h1>반려동물과 함께하는 세상</h1><p>당신의 반려친구, ForDog과 함께하세요!</p></div>
+  </div>
+  <div class="hero-slide" style="background-image:url('img/111.jpg');"></div>
+  <div class="hero-slide" style="background-image:url('img/MYH20230312001400641.jpg');">
+    <div class="hero-text"><h1>반려동물과 함께하는 세상</h1><p>당신의 반려친구, ForDog과 함께하세요!</p></div>
+  </div>
+  <div class="hero-slide" style="background-image:url('img/ChatGPT Image 05_11_48.png');">
+    <div class="hero-text"></div>
+  </div>
+</div>
+
+<!-- 입양 이야기 -->
+<section id="success-stories" class="fade-section">
+  <h2></h2>
+  <div class="story-container">
+    <div class="story-card">
+      <img src="/img/5a958fee3aab0529008b48e4.webp" alt="입양 전 Dice">
+      <h3>Dice의 변화</h3>
+      <p>“버려졌던 Dice, 이제는 미소를 멈추지 않아요.”</p>
+    </div>
+    <div class="story-card">
+      <img src="/img/Before___after_dog_hero.png" alt="입양 전후 Coco">
+      <h3>Coco의 기적</h3>
+      <p>“길 위에 있던 Coco, 따뜻한 가족을 만나 새 삶을 시작했어요.”</p>
+    </div>
+    <div class="story-card">
+      <img src="/img/cookie_1.jpg" alt="입양 전후 Max">
+      <h3>Max의 성장</h3>
+      <p>“처음엔 겁이 많았지만, 이젠 누구보다 용감한 Max!”</p>
+    </div>
+  </div>
+</section>
+
+<!-- 주요 메뉴 (HTML) -->
+<section class="menu-section">
+  <!-- 배경은 섹션 전체가 담당하므로 내부 콘텐츠만 container로 감쌈 -->
+  <div class="container">
+    <h2 class="menu-title">주요 메뉴</h2>
+
+    <div class="card-container">
+      <div class="card">
+        <div class="card-title">보호소 안내</div>
+        <button class="menu-btn" onclick="location.href='/guide/shelter'">바로가기</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">봉사 안내</div>
+        <button class="menu-btn" onclick="location.href='/guide/volunteer'">바로가기</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">동물 등록</div>
+        <button class="menu-btn" onclick="location.href='/guide/petRegister'">바로가기</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">오시는 길</div>
+        <button class="menu-btn" onclick="location.href='/intro/map'">바로가기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 캐릭터/장식용 이미지: 섹션 바깥쪽 끝에 배치 -->
+  <img src="/img/cha_02.png" alt="캐릭터 왼쪽" class="menu-char left-char" />
+  <img src="/img/cha_01.png" alt="캐릭터 오른쪽" class="menu-char right-char" />
+</section>
+
+
+
+<section class="notice-section fade-section">
+  <!-- 배경 이미지 2개 -->
+  <img src="/img/cha_0301.png" alt="공지 배경 1" class="notice-bg-img">
+  <img src="/img/cha_0302.png" alt="공지 배경 2" class="notice-bg-img second">
+
+  <h2 style="text-align:center; margin-bottom:30px;">공지사항</h2>
+  <div class="card-container" style="flex-direction:column; gap:12px; max-width:600px; margin:auto;">
+    <div th:each="noticeDTO, loop:${noticeFiveList}">
+      <div class="card" style="padding:12px 20px; font-size:0.95rem; cursor: pointer;"
+           th:onclick="|location.href='@{/news/notice/{id}(id=${noticeDTO.no})}'|">
+        [공지] [[${noticeDTO.subject}]]</div>
+    </div>
+  </div>
+</section>
+
+<!-- 새로운 배너 이미지 -->
+<section class="middle-banner">
+  <img src="/img/banner2.png" alt="중간 배너">
+</section>
+
+<!-- 포토 갤러리 -->
+
+<div class="photo-slider">
+  <div class="slide-track">
+    <!-- 원본 이미지 7장 -->
+    <img src="/img/20250813063216726.jpg" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=600&h=600&fit=crop" alt="고양이" />
+    <img src="https://images.unsplash.com/photo-1558788353-f76d92427f16?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1507149833265-60c372daea22?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=600&h=600&fit=crop" alt="고양이" />
+    <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="/img/202508100446043550.jpg" alt="강아지" />
+    <img src="/img/202508081028021280.jpg" alt="강아지" />
+    <img src="/img/202508070351549280.jpg" alt="강아지" />
+    <img src="/img/202508060128077540.jpg" alt="강아지" />
+    <img src="/img/202508050212109730.jpg" alt="강아지" />
+    <img src="/img/202508050211438800.jpg" alt="강아지" />
+    <img src="/img/20250819031500557.jpg" alt="강아지" />
+
+    <!-- 복제된 이미지 7장 (원본과 동일하게) -->
+    <img src="/img/20250813063216726.jpg" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=600&h=600&fit=crop" alt="고양이" />
+    <img src="https://images.unsplash.com/photo-1558788353-f76d92427f16?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1507149833265-60c372daea22?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=600&h=600&fit=crop" alt="고양이" />
+    <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=600&h=600&fit=crop" alt="강아지" />
+    <img src="/img/202508100446043550.jpg" alt="강아지" />
+    <img src="/img/202508081028021280.jpg" alt="강아지" />
+    <img src="/img/202508070351549280.jpg" alt="강아지" />
+    <img src="/img/202508060128077540.jpg" alt="강아지" />
+    <img src="/img/202508050212109730.jpg" alt="강아지" />
+    <img src="/img/202508050211438800.jpg" alt="강아지" />
+    <img src="/img/20250819031500557.jpg" alt="강아지" />
+  </div>
+</div>
+
+
+
+
+<section class="partners-section fade-section">
+  <div class="partner-slider">
+    <a href="https://www.kkc.or.kr/" target="_blank">
+      <img src="/img/2018-04-121549075030940_16406771_648364005365584_3202437563550570672_n.jpg" alt="한국애견협회 (KKC)">
+    </a>
+    <a href="https://kaca.kr/" target="_blank">
+      <img src="/img/sdfysfsdtw.png" alt="한국반려동물기업협회 (KACA)">
+    </a>
+    <a href="https://www.gkapp.or.kr/" target="_blank">
+      <img src="/img/02de19c08fb7c.png" alt="한국펫사료협회 (KAPP)">
+    </a>
+    <a href="https://www.companion.or.kr/" target="_blank">
+      <img src="/img/645t463456.png" alt="한국반려동물협회">
+    </a>
+  </div>
+</section>
+
+
+
+<!-- 챗봇 -->
+<div id="chatbot-icon">💬</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<!-- 스크립트 -->
+<script>
+  // 인트로 (처음만 표시)
+  const intro = document.getElementById('intro');
+  if (localStorage.getItem('introCompleted')) {
+    intro.style.display = 'none';
+  } else {
+    setTimeout(() => {
+      intro.style.display = 'none';
+      localStorage.setItem('introCompleted', 'true');
+    }, 3000);
+  }
+
+  // 챗봇
+  document.getElementById('chatbot-icon').addEventListener('click', () => {
+    alert('챗봇 기능은 준비 중입니다!');
+  });
+
+  // 페이드 인
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-section').forEach(section => observer.observe(section));
+
+  // 히어로 슬라이드
+  const slides = document.querySelectorAll('.hero-slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 4000);
+</script>
+</body>
+</html>

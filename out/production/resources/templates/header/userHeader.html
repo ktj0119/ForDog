@@ -1,0 +1,53 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+  <div th:fragment="userHeader">
+    <header>
+      <div class="logo" style="font-size: 28px; font-weight: bold; margin-bottom: 10px;">
+        <a href="/" style="text-decoration: none; color: #333;">ForDog</a>
+      </div>
+      <nav class="nav-bar">
+        <div class="menu">
+          <a class="nav-link" href="/metaverse/description">메타버스</a>
+        </div>
+        <div class="menu">
+          <a class="nav-link" href="#">소개 ▼</a>
+          <div class="dropdown">
+            <a href="/intro/introduce">홈페이지 소개</a>
+          </div>
+        </div>
+        <div class="menu">
+          <a class="nav-link" href="#">교육 ▼</a>
+          <div class="dropdown">
+            <a href="/edu/reading/list">리딩자료</a>
+            <a href="/edu/media/list">미디어자료</a>
+          </div>
+        </div>
+        <div class="menu">
+          <a class="nav-link" href="#">안내 ▼</a>
+          <div class="dropdown">
+            <a href="/guide/shelter">보호소안내</a>
+            <a href="/guide/volunteer">봉사안내</a>
+            <a href="/guide/petRegister">동물등록안내</a>
+          </div>
+        </div>
+        <div class="menu">
+          <a class="nav-link" href="#">소식 ▼</a>
+          <div class="dropdown">
+            <a href="/news/notice">공지사항</a>
+            <a href="/news/faq">FAQ</a>
+          </div>
+        </div>
+
+        <div class="menu" th:if="${session.memberNo == null}">
+          <a class="nav-link" href="/login/">로그인</a>
+        </div>
+
+        <div class="menu" th:if="${session.memberNo != null}">
+          <a class="nav-link" href="/login/logout">로그아웃</a>
+          <a class="nav-link" href="/mypage">마이페이지</a>
+        </div>
+      </nav>
+    </header>
+  </div>
+
+</html>

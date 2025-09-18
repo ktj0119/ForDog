@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 비밀번호 변경</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* 메인 영역 */
+    .mypage-main {
+        flex: 1;
+        background: #fff;
+        padding: 40px;
+        margin: 20px;
+    }
+            /* 전체 컨테이너 */
+        .mypage-container {
+            display: flex;
+            max-width: 1200px;
+            min-height: 600px;
+            margin: 40px auto;
+            gap: 30px;
+        }
+
+    /* 제목 */
+    .mypage-main h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    /* 안내 문구 */
+    .mypage-main h2 {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    /* 비밀번호 입력 폼 */
+    .mypage-main form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;       /* 부모 최대 폭 사용 */
+        max-width: 400px;  /* 최대 너비 유지 */
+    }
+
+    /* 안내 문구 (폼 안으로 이동했을 때) */
+    .mypage-main form h2 {
+        font-size: 16px;
+        font-weight: 500;
+        color: #666;
+        margin-bottom: 5px; /* input과 살짝 간격 */
+    }
+
+    /* 입력창 */
+    .mypage-main input[type="text"],
+    .mypage-main input[type="password"] {
+        width: 100%;             /* input 너비 꽉 채우기 */
+        padding: 12px 14px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 15px;
+        box-sizing: border-box;  /* 패딩 포함 너비 계산 */
+        transition: border-color 0.2s;
+    }
+
+    .mypage-main input[type="text"]:focus,
+    .mypage-main input[type="password"]:focus {
+        border-color: var(--highlight);
+        outline: none;
+    }
+
+    /* 버튼 */
+    .mypage-main button {
+        width: 100%;   /* 버튼도 input과 너비 맞춤 */
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: var(--highlight);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .mypage-main button:hover {
+        background: var(--highlight-dark);
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="mypage-container">
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: mypageBar"></div>
+
+  <!-- 메인 -->
+  <main class="mypage-main">
+    <h1>비밀번호 변경</h1>
+    <div>
+      <form name="form" method="post" action="/mypage/pwdChangeProc">
+        <h2>새로운 비밀번호를 입력해 주세요</h2>
+
+        <input type="password" id="password" name="pwd"
+               placeholder="영문, 숫자, 특수문자 포함 8 ~ 20자로 입력해주세요"
+               pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}" required>
+
+        <input type="password" id="password2" placeholder="비밀번호를 확인해주세요"
+               pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}" required>
+
+        <button id="password-check" type="button">확인</button>
+      </form>
+    </div>
+  </main>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<script>
+  const form = document.querySelector("form");
+  const password = document.getElementById('password');
+  const password2 = document.getElementById('password2');
+  const passwordCheckBtn = document.getElementById('password-check');
+
+  passwordCheckBtn.addEventListener('click', function() {
+    if (!password.checkValidity()) {
+      password.reportValidity();
+      password.focus();
+      return;
+    }
+
+    if (password.value !== password2.value) {
+      alert("비밀번호가 일치하지 않습니다.");
+      password2.focus();
+    } else {
+      form.submit();
+    }
+  });
+</script>
+</body>
+</html>

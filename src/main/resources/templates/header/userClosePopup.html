@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ForDog - 세션 만료</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--hover-bg);
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
+      color: var(--highlight);
+    }
+
+    .icon {
+      font-size: 50px;
+      color: var(--highlight);
+      margin-bottom: 20px;
+    }
+
+    .mention {
+      margin-bottom: 30px;
+      font-size: 20px;
+    }
+
+    .btn {
+      background-color: var(--highlight);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--highlight-dark);
+    }
+  </style>
+</head>
+<body>
+<div class="icon">
+  <i class="fas fa-clock"></i>
+</div>
+
+<h1>세션이 만료되었습니다</h1>
+
+<p class="mention">보안을 위해 일정 시간 동안 활동이 없어 로그아웃 되었습니다.</p>
+
+<button class="btn" onclick="window.close()">
+  <i class="fas fa-times"></i> 창 닫기
+</button>
+</body>
+</html>

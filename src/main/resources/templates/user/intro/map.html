@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 오시는 길</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userImg.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .map-container {
+      text-align: center;
+    }
+
+    .map-container iframe {
+      width: 100%;
+      height: 450px;
+      border: 0;
+      border-radius: 8px;
+      max-width: 900px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .address-info {
+      margin-top: 30px;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 본문 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: introBar"></div>
+
+  <!-- 메인 -->
+  <div class="container">
+  <h1><i class="fa-solid fa-paw"></i> 오시는 길</h1>
+  <div class="map-container">
+    <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3164.922680580017!2d127.4203987759938!3d36.32868949368047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35654b4a46d85b55%3A0x95c57a3f8b2dc9a1!2z64yA7ZWZ6rSR7Jet7IucIOyXrO2YuOyLnCDsnpTrj5kgMTIx67KI6ri4IDIw!5e0!3m2!1sko!2skr!4v1692747560000!5m2!1sko!2skr"
+            width="600"
+            height="450"
+            style="border:0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <div class="address-info">
+      📍 주소: 성심광역시 중앙로 121번길 20 방산빌딩 2층,3층(일부),5층<br>
+      🚇 지하철: 대전1호선 중앙로역 9번출구 도보 10분<br>
+      ☎ 문의: 02-123-4567
+    </div>
+  </div>
+  </div>
+</main>
+
+<div th:replace="header/userBackImg :: userBackIMG"></div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+</body>
+</html>

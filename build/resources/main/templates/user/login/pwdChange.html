@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 비밀번호 변경</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userLogin.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <section class="login-container">
+    <h2>비밀번호 입력</h2>
+
+    <form name="form" method="post" action="/login/pwdChangeProc">
+      <input type="hidden" name="id" th:value="${memberDTO.id}">
+      <p>새로운 비밀번호를 입력해 주세요</p> <br>
+
+      <input type="password" id="password" name="pwd"
+             placeholder="영문, 숫자, 특수문자 포함 8 ~ 20자로 입력해주세요"
+             pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}" required>
+
+      <input type="password" id="password2" placeholder="비밀번호를 확인해주세요"
+             pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}" required>
+
+      <button id="password-check" type="button">확인</button>
+    </form>
+  </section>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<script>
+  const form = document.querySelector("form");
+  const password = document.getElementById('password');
+  const password2 = document.getElementById('password2');
+  const passwordCheckBtn = document.getElementById('password-check');
+
+  passwordCheckBtn.addEventListener('click', function() {
+    if (!password.checkValidity()) {
+      password.reportValidity();
+      password.focus();
+      return;
+    }
+
+    if (password.value !== password2.value) {
+      alert("비밀번호가 일치하지 않습니다.");
+      password2.focus();
+    } else {
+      form.submit();
+    }
+  });
+</script>
+</body>
+</html>

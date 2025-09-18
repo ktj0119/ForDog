@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Quiz</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+    <style>
+        table td {
+            text-align: left;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/contentsAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>퀴즈 수정</h2>
+            <form id="form" name="form" method="post" th:object="${returnDTO}"
+                  action="/manager/contents/quiz/sujungProc">
+                <input type="hidden" name="no" th:value="${returnDTO.no}">
+                <div class="vertical-table">
+                <table>
+                    <tr>
+                        <th>미디어그룹</th>
+                        <td>
+                            <select th:field="*{mediaGroup.no}">
+                                <option th:each="mediaGroup : ${list}"
+                                        th:value="${mediaGroup.no}"
+                                        th:text="${mediaGroup.name}"
+                                        th:selected="${mediaGroup.no == returnDTO.mediaGroup.no}">
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>문제</th>
+                        <td><input type="text" name="question" th:value="${returnDTO.question}" required></td>
+                    </tr>
+                    <tr>
+                        <th>정답</th>
+                        <td><input type="text" name="answer" th:value="${returnDTO.answer}" required></td>
+                    </tr>
+                </table>
+                </div>
+                <div class="btn-box">
+                    <button type="button" onclick="sujung();">수정</button>
+                    <button type="button" class="btn-cancel"
+                            th:onclick="location.href='/manager/contents/quiz/view/' + [[${returnDTO.no}]];">
+                        취소
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('form');
+
+    function sujung() {
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            alert('입력되지 않은 정보가 있습니다. 다시 입력해 주세요.');
+        }
+    }
+</script>
+</body>
+</html>

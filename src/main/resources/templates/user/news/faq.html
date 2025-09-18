@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 자주 묻는 질문(FAQ)</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}" />
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    details {
+      border: 1px solid var(--highlight);
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 15px 20px 15px 50px;
+      background-color: var(--hover-bg);
+      transition: background-color 0.3s ease;
+      user-select: text;
+      position: relative;
+    }
+
+    summary {
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: text;
+      list-style: none;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    /* 화살표 아이콘 (▶) 기본 상태 */
+    summary::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%) rotate(0deg);
+      transform-origin: center;
+      transition: transform 0.3s ease;
+      color: var(--highlight);
+      font-size: 18px;
+      user-select: none;
+    }
+
+    /* 열렸을 때 화살표가 아래로 향하도록 */
+    details[open] > summary::before {
+      transform: translateY(-50%) rotate(90deg);
+    }
+
+    details p {
+      margin-top: 10px;
+      font-size: 15px;
+      user-select: text;
+      line-height: 1.4;
+    }
+
+    /* 1365 링크 전용 스타일 */
+    .link-1365,
+    .link-1365:visited,
+    .link-1365:hover,
+    .link-1365:active,
+    .link-1365:focus {
+      color: #694230;
+      text-decoration: none; /* 필요하면 제거, 밑줄 원하면 이 줄 삭제 */
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: newsBar"></div>
+
+  <!-- 메인 -->
+  <div class="container">
+    <h1><i class="fa-solid fa-paw"></i> 자주 묻는 질문 (FAQ)</h1>
+
+    <details>
+      <summary> Q. 동물 등록은 꼭 해야 하나요?</summary>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A. 네, 관련 법에 따라 의무이며 유실 시 신속한 주인 확인이 가능합니다.</p>
+    </details>
+
+    <details>
+      <summary>Q. 봉사활동은 어떻게 신청하나요?</summary>
+      <p>
+        A. <a class="link-1365" href="https://www.1365.go.kr" target="_blank" rel="noopener">
+        1365 자원봉사 포털(https://www.1365.go.kr)
+      </a>을 통해 신청 가능합니다.
+      </p>
+    </details>
+
+    <details>
+      <summary>Q. 회원가입은 어떻게 하나요?</summary>
+      <p>A. 로그인 페이지에서 "회원가입" 버튼을 클릭해 절차를 진행하실 수 있습니다.</p>
+    </details>
+
+    <details>
+      <summary>Q. 자료는 다운로드 가능한가요?</summary>
+      <p>A. 네, 리딩 자료 상세 페이지에서 첨부파일 형식으로 다운로드할 수 있습니다.</p>
+    </details>
+  </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

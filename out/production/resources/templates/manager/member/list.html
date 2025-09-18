@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Member</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>아이디</th>
+            <th>이름</th>
+            <th>전화번호</th>
+            <th>가입일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:if="${list.size() == 0}">
+            <td colspan="5">등록된 회원이 없습니다.</td>
+        </div>
+        <div th:unless="${list.size() == 0}">
+            <div th:each="memberDTO : ${list}">
+                <tr>
+                    <td>[[${memberDTO.no}]]</td>
+                    <td><a th:href="@{|/manager/member/view/${memberDTO.no}|}" th:text="${memberDTO.id}"></a></td>
+                    <td>[[${memberDTO.name}]]</td>
+                    <td>[[${memberDTO.phone}]]</td>
+                    <td th:text="${#temporals.format(memberDTO.regiDate, 'yyyy-MM-dd')}"></td>
+                </tr>
+            </div>
+        </div>
+        </tbody>
+    </table>
+</div>
+<br>
+<br>
+<div><a th:href="@{|/manager/member/chuga|}">추가</a></div>
+</body>
+</html>

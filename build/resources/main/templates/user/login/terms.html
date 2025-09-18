@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 회원가입 1단계 이용약관 동의</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <style>
+    .register-container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 10px;
+    }
+
+    .register-container h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: var(--highlight);
+    }
+
+    .terms-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      height: 400px;
+      overflow-y: auto;
+      background-color: #fefefe;
+      font-size: 14px;
+      line-height: 1.5;
+      user-select: text;
+    }
+
+    .agreement {
+      margin-top: 20px;
+      font-size: 15px;
+      user-select: text;
+    }
+
+    .agreement label {
+      display: block;
+      margin: 10px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .agreement input[type="checkbox"] {
+      transform: scale(1.2);
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .btn-area {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .btn-area button {
+      padding: 10px 40px;
+      background-color: var(--highlight);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-area button:hover {
+      background-color: var(--highlight-dark);
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <div class="register-container">
+    <h1>회원가입 - 이용약관 동의</h1>
+
+    <div class="terms-box" tabindex="0" aria-label="이용약관 내용">
+      <p>제1조 (목적):<br>
+        이 약관은 [서비스명 또는 회사명] (이하 "회사")가 제공하는 서비스 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항,
+        기타 필요한 사항을 규정함을 목적으로 합니다.
+        <br><br>
+        제2조 (용어의 정의):<br>
+        "서비스"라 함은 회사가 제공하는 모든 온라인 및 오프라인 서비스를 의미합니다.
+        "회원"이라 함은 회사에 개인정보를 제공하여 회원가입을 한 자로서, 회사가 제공하는 서비스를 이용할 수 있는 자를 의미합니다.
+        "이용자"라 함은 회원의 자격 유무와 관계없이 회사가 제공하는 서비스를 이용하는 자를 의미합니다.
+        <br><br>
+        제3조 (약관의 효력 및 변경):<br>
+        이 약관은 서비스 화면에 게시하거나 기타의 방법으로 공지함으로써 그 효력이 발생합니다.
+        회사는 필요한 경우 이 약관을 변경할 수 있으며, 변경된 약관은 적용일 전 7일 이상 서비스 화면에 게시하거나 이메일 등으로 공지합니다.
+        회원은 변경된 약관에 동의하지 않을 경우 서비스 이용을 중단할 수 있으며,
+        변경된 약관의 효력 발생일 이후에도 서비스를 계속 이용하는 경우 변경된 약관에 동의한 것으로 간주됩니다.
+        <br><br><br>
+        제2장 회원가입 및 정보
+        <br><br>
+        제4조 (회원가입):<br>
+        회원가입은 이용자가 이 약관에 동의하고, 회사가 정한 가입 양식에 따라 개인정보를 기입하여 회원가입을 신청하면 회사가 이를 승낙함으로써 완료됩니다.
+        회사는 다음 각 호에 해당하는 경우 회원가입을 거부하거나 제한할 수 있습니다.
+        가입 신청 시 허위 정보를 기재한 경우
+        다른 사람의 명의를 도용한 경우
+        이전에 회원자격을 상실한 적이 있는 경우
+        기타 회사가 정한 가입 조건을 충족하지 못하는 경우
+        <br><br>
+        제5조 (회원정보의 변경):<br>
+        회원은 개인정보관리 화면을 통해 언제든지 자신의 개인정보를 열람하고 수정할 수 있습니다.
+        단, 서비스 관리를 위해 필요한 일부 정보는 수정이 제한될 수 있습니다.
+        <br><br>
+        제6조 (회원 탈퇴 및 자격 상실):<br>
+        회원은 언제든지 회사에 탈퇴를 요청할 수 있으며, 회사는 특별한 사유가 없는 한 즉시 탈퇴 처리를 합니다.
+        회사가 다음 각 호에 해당하는 경우 회원의 자격을 제한하거나 박탈할 수 있습니다.
+        이용약관 및 관련 법규를 위반한 경우
+        회사의 서비스 운영을 고의로 방해한 경우
+        다른 회원의 서비스 이용을 방해하거나 명예를 훼손한 경우
+        기타 회사가 부적절하다고 판단하는 행위를 한 경우
+        <br><br><br>
+        제3장 서비스 이용
+        <br><br>
+        제7조 (서비스 이용):<br>
+        회원은 이 약관 및 회사가 정한 운영정책에 따라 서비스를 이용할 수 있습니다.
+        <br><br>
+        제8조 (서비스 내용 및 변경):<br>
+        회사는 서비스의 내용을 추가, 변경, 삭제할 수 있으며, 이 경우 변경 사항을 미리 공지합니다.
+        <br><br>
+        제9조 (정보의 제공 및 광고의 게재):<br>
+        회사는 서비스 제공과 관련하여 필요한 정보 및 광고를 서비스 화면, 이메일, SMS 등으로 제공할 수 있습니다.
+        <br><br>
+        제10조 (저작권 등):<br>
+        회사가 제공하는 서비스와 관련된 저작권 및 기타 지적재산권은 회사에 귀속됩니다.
+        회원은 회사의 사전 동의 없이 서비스를 복제, 배포, 전송, 전시, 출판, 방송 등의 방법으로 이용할 수 없습니다. </p>
+    </div>
+
+    <form action="/login/register" method="get" novalidate>
+      <div class="agreement">
+        <label>
+          <input type="checkbox" required />
+          이용약관에 동의합니다.
+        </label>
+        <label>
+          <input type="checkbox" />
+          마케팅 수신에 동의합니다. (선택)
+        </label>
+      </div>
+      <div class="btn-area">
+        <button type="submit">다음</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const termsCheck = document.querySelector('input[type="checkbox"][required]');
+
+    form.addEventListener("submit", function (e) {
+      if (!termsCheck.checked) {
+        alert("계속 진행하시려면 이용약관에 동의해야 합니다.");
+        termsCheck.focus();
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+</body>
+</html>

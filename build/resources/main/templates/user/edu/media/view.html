@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 미디어 자료 상세</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}" />
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .container-body h3 {
+      margin-top: 20px;
+    }
+
+    .container-body p {
+      white-space: pre-line;
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    .container-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .container-body table th {
+      background-color: var(--hover-bg);
+      color: var(--highlight);
+      padding: 10px;
+      border-bottom: 1px solid var(--highlight);
+      text-align: left;
+    }
+
+    .container-body table td {
+      padding: 10px;
+    }
+
+    .container-body table tr:nth-child(odd) {
+      background-color: var(--hover-bg);
+    }
+
+    /* 모달 배경 */
+    #modal-background {
+      display:none;
+      position:fixed;
+      top:0; left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+
+    /* 모달 본체 */
+    #login-modal {
+      display:none;
+      position:fixed;
+      top:50%; left:50%;
+      transform:translate(-50%, -50%);
+      width: 400px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease;
+      z-index: 100;
+    }
+
+    .modal-header {
+      background-color: var(--highlight);
+      padding: 6px 20px;
+      text-align: right;
+    }
+
+    #close {
+      background: transparent;
+      border: none;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+      font-size: 16px;
+      color: var(--text-dark);
+      text-align: center;
+    }
+
+    .modal-footer {
+      padding: 14px;
+      background: var(--hover-bg);
+      text-align: center;
+    }
+
+    .modal-footer a {
+      color: var(--highlight);
+      font-weight: bold;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+
+    .modal-footer a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translate(-50%, -45%);}
+      to {opacity: 1; transform: translate(-50%, -50%);}
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: eduBar"></div>
+
+  <!-- 메인 -->
+  <div class="container">
+    <div>
+      <a class="list-link"
+         th:href="@{|/edu/media/list?page=${page}&searchType=${searchType}&searchKeyword=${searchKeyword}|}">
+        목록으로
+      </a>
+
+      <button class="list-link" th:if="${session.memberNo == null}" id="open-login">
+        수강신청
+      </button>
+
+      <button class="list-link" type="button"
+              th:if="${session.memberNo != null and checkRegisterDTO == null}" id="open-register">
+        수강신청
+      </button>
+
+      <button class="list-link" type="button"
+              th:if="${session.memberNo != null and checkRegisterDTO != null}" id="open-video">
+        강의시청
+      </button>
+    </div>
+
+    <h2>[[${returnDTO.name}]]</h2>
+
+    <div class="container-body">
+      <!-- 수강 신청 폼 블록요소 때문에 밑에다 둠 -->
+      <form name="form" method="post" action="/edu/media/courseRegister">
+        <input type="hidden" name="member.no" th:value="${session.memberNo}"/>
+        <input type="hidden" id="mediaGroupNo" name="mediaGroup.no" th:value="${returnDTO.no}"/>
+      </form>
+
+      <h3>교육소개</h3>
+      <p>
+        ■ 교육대상
+        반려동물 학습 희망자
+
+        ■ 강좌소개
+        본 강좌는 반려동물과 함께 행복하고 건강한 생활을 하기 위해 필요한 전반적인 내용을 다룹니다.
+        각 교육 분야에 맞는 영상으로 구성되며 반려동물과의 유대감을 높이는 데 중점을 둡니다.
+
+        ■ 유의사항
+        모든 강의를 수강한 뒤 시험에 합격하면 수료증이 발급됩니다.
+
+        ■ 관련문의
+        ForDog (042-000-0000)
+      </p>
+
+      <h3>수료기준</h3>
+      <p>
+        아래 기준을 모두 충족할 시 수료
+
+        1. 교육 영상 이수율 100%
+
+        2. 시험응시(점수 60점 이상)
+        * 재응시 가능
+      </p>
+
+      <h3>강의목차</h3>
+      <table>
+        <colgroup>
+          <col style="width: 30%;">
+          <col style="width: 70%;">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>순번</th>
+            <th>제목</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="mediaVideoDTO, loop:${mediaVideoList}">
+            <td th:text="${loop.index + 1}"></td>
+            <td>[[${mediaVideoDTO.subject}]]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 모달 배경 -->
+  <div id="modal-background"></div>
+
+  <!-- 로그인 모달 -->
+  <div id="login-modal" style="display:none;">
+    <div>
+      <div class="modal-header">
+        <button id="close" aria-label="닫기">×</button>
+      </div>
+      <div class="modal-body">
+        <p>로그인 시 수강신청이 가능하며,<br>학습이력 저장, 수료증 발급 등 다양한 혜택을 받으실 수 있습니다.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="/login/terms">회원가입</a> | <a href="/login/">로그인</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<!-- 로그인 모달 -->
+<script>
+  const loginModal = document.getElementById('login-modal');
+  const modalBackground = document.getElementById('modal-background');
+  const close = document.getElementById('close');
+  const openLogin = document.getElementById('open-login');
+
+  if (openLogin) {
+    openLogin.addEventListener('click', function() {
+      modalBackground.style.display = 'block';
+      loginModal.style.display = 'flex';
+    });
+  }
+
+  if (close) {
+    close.addEventListener('click', function() {
+      modalBackground.style.display = 'none';
+      loginModal.style.display = 'none';
+    });
+  }
+</script>
+
+<!-- 수강신청, 강의시청 -->
+<script>
+  const openRegister = document.getElementById('open-register');
+  const registerForm = document.forms['form'];
+  const openVideo = document.getElementById('open-video');
+  const mediaGroupNo = document.getElementById('mediaGroupNo').value;
+
+  if (openRegister) {
+    openRegister.addEventListener('click', function() {
+      if (confirm('수강 신청하시겠습니까?')) {
+        registerForm.submit();
+        alert('수강신청이 완료되었습니다.');
+      }
+    });
+  }
+
+  if (openVideo) {
+    openVideo.addEventListener('click', function() {
+      const popup = window.open(
+        `/edu/media/video/${mediaGroupNo}`,
+        'fullScreenPopup',
+        `width=${screen.width},height=${screen.height},left=0,top=0`
+      );
+
+      popup.onload = function() {
+        const video = popup.document.querySelector('video');
+        if (video && video.requestFullscreen) {
+          video.requestFullscreen();
+        }
+      };
+    });
+  }
+</script>
+</body>
+</html>

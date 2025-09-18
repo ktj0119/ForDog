@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 동물 등록 안내</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 50px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 12px 30px;
+      background-color: #ff944d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #e67d33;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="container">
+  <div class="icon">📋</div>
+  <h1>동물 등록 안내</h1>
+  <p>
+    반려동물 등록은 보호자의 책임과 동물의 안전을 지키기 위한 소중한 절차입니다.<br>
+    유실 시 신속한 주인 확인이 가능하며, 동물 학대 예방 및 반려동물 문화 정착에 기여합니다.
+  </p>
+  <a href="https://www.animal.go.kr/front/index.do" target="_blank" class="btn">동물 등록하러 가기</a>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

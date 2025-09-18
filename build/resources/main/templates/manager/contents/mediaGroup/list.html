@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management MediaGroup</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+    <link rel="stylesheet" th:href="@{/css/paging.css}"/>
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+<div class="layout">
+    <div th:replace="manager/layout/contentsAside :: asideMenu"></div>
+
+    <div class="content">
+        <!-- 타이틀 + 버튼 영역 -->
+        <div class="content-header">
+            <h2> 미디어그룹 관리</h2>
+        </div>
+        <!-- 검색창 -->
+        <form name="cmmnForm" method="get" action="/manager/contents/mediaGroup/list" class="search-area">
+            <div class="tit">검색어</div>
+            <div class="input_box">
+                <input name="searchKeyword" id="searchKeyword" placeholder="검색어를 입력하세요." type="text" th:value="${searchKeyword}">
+            </div>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+            <a th:href="@{|/manager/contents/mediaGroup/chuga|}">
+                <button type="button">+ 미디어그룹 추가</button>
+            </a>
+        </form>
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>그룹명</th>
+                <th>활성화 여부</th>
+                <th>설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 데이터 없을 때 -->
+            <tr th:if="${list.content.size() == 0}">
+                <td colspan="4" style="text-align:center;">등록된 그룹이 없습니다.</td>
+            </tr>
+
+            <!-- 데이터 있을 때 -->
+            <tr th:each="mediaGroupDTO, iterStat : ${list.content}">
+                <td th:text="${list.pageable.offset + iterStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{|/manager/contents/mediaGroup/view/${mediaGroupDTO.no}|}"
+                       th:text="${mediaGroupDTO.name}"></a>
+                </td>
+                <td th:if="${mediaGroupDTO.isActive == true}">활성화</td>
+                <td th:if="${mediaGroupDTO.isActive == false}">비활성화</td>
+                <td>[[${mediaGroupDTO.description}]]</td>
+
+            </tr>
+            </tbody>
+        </table>
+        <!-- 페이징 -->
+        <div th:replace="header/paging :: paging"></div>
+
+    </div>
+</div>
+
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

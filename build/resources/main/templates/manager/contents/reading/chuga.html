@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Reading</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<!-- 전체 레이아웃 -->
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/contentsAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>리딩 자료 등록</h2>
+            <form id="form" name="form" method="post" action="/manager/contents/reading/chugaProc"
+                  th:object="${readingDTO}" enctype="multipart/form-data">
+                <div class="vertical-table">
+                <table>
+                    <tr>
+                        <th>제목</th>
+                        <td><input type="text" name="subject" required></td>
+                    </tr>
+                    <tr>
+                        <th>그룹</th>
+                        <td><input type="text" name="readingGroup" required></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td><textarea name="content" required></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>첨부파일</th>
+                        <td><input type="file" th:field="*{file}" accept="application/pdf"></td>
+                    </tr>
+                </table>
+                </div>
+                <div class="btn-box">
+                    <button type="button" onclick="chuga();">등록</button>
+                    <button type="button" class="btn-cancel"
+                            onclick="location.href='/manager/contents/reading/list';">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('form');
+
+    function chuga() {
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            alert('입력되지 않은 정보가 있습니다. 다시 입력해 주세요.');
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Reading</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+    <link rel="stylesheet" th:href="@{/css/paging.css}"/>
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+<div class="layout">
+    <div th:replace="manager/layout/contentsAside :: asideMenu"></div>
+
+    <div class="content">
+        <!-- 타이틀 + 버튼 영역 -->
+        <div class="content-header">
+            <h2> 리딩자료 관리</h2>
+        </div>
+
+        <!--검색창-->
+        <form class="search-area" method="get" action="/manager/contents/reading/list" style="justify-content:flex-start;">
+            <div class="filters">
+                <select name="searchType" onchange="this.form.submit()">
+                    <option value="" th:selected="${searchType == null or searchType == ''}">전체</option>
+                    <option th:each="group : ${groupList}"
+                            th:value="${group}"
+                            th:text="${group}"
+                            th:selected="${searchType == group}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- 검색어 입력 필드 -->
+            <input type="text" name="searchKeyword" th:value="${searchKeyword}" placeholder="검색어를 입력하세요">
+
+            <!-- 검색 버튼 -->
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+
+            <!-- 리딩자료 추가 버튼 -->
+            <a th:href="@{|/manager/contents/reading/chuga|}" style="margin-left:auto;">
+                <button type="button">+ 리딩자료 추가</button>
+            </a>
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>그룹</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 데이터 없을 때 -->
+            <tr th:if="${list.content.size() == 0}">
+                <td colspan="4" style="text-align:center;">등록된 자료가 없습니다.</td>
+            </tr>
+
+            <!-- 데이터 있을 때 -->
+            <tr th:each="readingDTO, iterStat : ${list.content}">
+                <td th:text="${list.pageable.offset + iterStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{|/manager/contents/reading/view/${readingDTO.no}|}"
+                       th:text="${readingDTO.subject}"></a>
+                </td>
+                <td>[[${readingDTO.readingGroup}]]</td>
+                <td th:text="${#temporals.format(readingDTO.regiDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 페이징 -->
+        <div th:replace="header/paging :: paging"></div>
+
+    </div>
+</div>
+
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

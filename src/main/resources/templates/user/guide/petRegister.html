@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 동물 등록 안내</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userImg.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .container {
+   position: relative;
+   padding: 60px 40px;
+   border-radius: 12px;
+   text-align: center;
+   color: #fff;
+
+   /* 배경 2개 + 색상 레이어 */
+   background-image:
+     linear-gradient(rgba(216,123,71,0.6), rgba(216,123,71,0.6)),
+     url('/img/bg_linedog.png/'),
+     url('/img/bg_linecat.png/');
+   background-size: cover, 200px, 200px;
+   background-position: center, top right, top left;
+   background-repeat: no-repeat, no-repeat, no-repeat;
+   background-blend-mode: overlay; /* 색상 입히기 */
+
+ }
+
+         .icon {
+           font-size: 50px;
+           margin-bottom: 25px;
+           color: var(--highlight);
+         }
+         .content-section {
+           margin-bottom: 40px;
+         }
+         .content-section h2 {
+           font-size: 24px;
+           margin-bottom: 15px;
+           color: var(--highlight-dark);
+         }
+         .content-section h3 {
+           font-size: 20px;
+           margin: 15px 0 10px;
+           color: var(--text-dark);
+         }
+         .content-section p, .content-section li {
+           font-size: 17px;
+           line-height: 1.7;
+           margin-bottom: 10px;
+         }
+         .btn {
+           width: 220px;
+           display: inline-block;
+           padding: 14px 38px;
+           background-color: var(--highlight);
+           color: white;
+           border-radius: 8px;
+           font-size: 18px;
+           font-weight: 600;
+           text-decoration: none;
+           transition: background-color 0.3s ease;
+           box-shadow: 0 4px 8px rgba(216,123,71,0.4);
+           margin-top: 20px;
+           position: absolute;
+           bottom: 30px;   /* 아래에서 30px */
+           right: 370px;    /* 오른쪽에서 30px */
+
+         }
+         .btn:hover {
+           background-color: var(--highlight-dark);
+           box-shadow: 0 6px 12px rgba(184,96,45,0.6);
+         }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: guideBar"></div>
+
+  <div class="container">
+    <div class="icon">📋</div>
+    <h1 style="color: var(--text-dark);">동물 등록 안내</h1>
+
+    <!-- 소개 -->
+    <div class="content-section">
+      <p>동물등록제는 <strong>사랑의 끈</strong>입니다.<br>
+        동물등록제는 2014년 1월 1일부터 의무 시행 중입니다.</p>
+      <p>등록대상동물의 소유자는 반려동물 보호와 유실·유기 방지를 위하여 가까운 시·군·구청에 반드시 동물등록을 해야 하며, 등록하지 않을 경우 과태료가 부과됩니다.</p>
+      <p><em>예외 :</em> 등록대상동물이 맹견이 아닌 경우로서 도서 또는 등록 대행자가 없는 읍·면 지역은 지자체 조례에 따라 등록하지 않을 수 있습니다.</p>
+    </div>
+
+    <!-- 등록대상 -->
+    <div class="content-section">
+      <h2>등록대상 동물</h2>
+      <p>주택·준주택에서 기르거나 그 외 장소에서 반려 목적으로 기르는 <strong>월령 2개월 이상인 개</strong></p>
+    </div>
+
+    <!-- 마이크로칩 -->
+    <div class="content-section">
+      <h2>마이크로칩은 안전한가요?</h2>
+      <p>동물등록에 사용되는 마이크로칩(RFID)은 쌀알만한 크기의 동물용 의료기기입니다. 체내 이물 반응이 없는 재질로 제작되었으며, 동물용 의료기기 기준규격 및 국제규격에 적합한 제품만 사용됩니다.</p>
+    </div>
+
+    <!-- 등록방법 -->
+    <div class="content-section">
+      <h2>동물 등록 방법</h2>
+      <ul>
+        <li>내장형 무선식별장치(마이크로칩) 개체 삽입</li>
+        <li>외장형 무선식별장치 부착</li>
+      </ul>
+    </div>
+
+    <!-- 등록 절차 -->
+    <div class="content-section">
+      <h2>동물 등록 절차 안내</h2>
+      <ol>
+        <li>최초 등록 시에는 반드시 등록대상동물과 동반하여 <strong>방문 신청</strong>해야 합니다.</li>
+        <li>지자체 조례에 따라 대행업체(지정 동물병원)를 통해서만 등록할 수 있는 경우가 있으므로 사전에 확인이 필요합니다.</li>
+        <li>대리인 신청 시에는 위임장, 신분증 사본 등이 필요하므로 반드시 등록기관에 사전 확인하세요.</li>
+      </ol>
+    </div>
+
+    <!-- 등록 필요성 -->
+    <div class="content-section">
+      <h2>동물 등록은 왜 필요할까요?</h2>
+      <p>반려동물을 잃어버렸을 때, 등록번호를 통해 소유자를 신속히 찾을 수 있습니다.
+        또한 반려동물 보호, 유기 방지, 동물 학대 예방에 큰 도움이 됩니다.</p>
+    </div>
+
+    <!-- 외출 시 주의사항 -->
+    <div class="content-section">
+      <h2>개와 함께 외출할 때에는</h2>
+      <ul>
+        <li>소유자의 성명, 전화번호, 동물등록번호가 표시된 인식표를 착용시켜 주세요.</li>
+        <li>반드시 목줄을 착용하고, 배설물이 생기면 바로 치워주세요.</li>
+      </ul>
+    </div>
+
+    <!-- 신청 요약 -->
+    <div class="content-section">
+      <h2>동물 등록 요약</h2>
+      <ul>
+        <li><strong>등록대상 :</strong> 2개월 이상 개</li>
+        <li><strong>등록대행기관 :</strong> 지정 동물병원 등</li>
+        <li><strong>등록 방법 :</strong> 무선식별장치 체내 삽입 또는 외장형 부착</li>
+        <li><strong>등록증 발급 :</strong> 시·군·구청에서 동물정보, 등록번호, 소유자 정보 포함</li>
+      </ul>
+      <p>기타 자세한 사항은 <strong>시·군·구청</strong>에 문의하시기 바랍니다.</p>
+    </div>
+
+    <a href="https://www.animal.go.kr/front/index.do" target="_blank" class="btn">동물 등록하러 가기</a>
+  </div>
+</main>
+
+<div th:replace="header/userBackImg :: userBackIMG"></div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

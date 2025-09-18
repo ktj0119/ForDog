@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Member</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<form name="form" method="post" action="/manager/member/sujungProc">
+    <input type="hidden" name="no" th:value="${returnDTO.no}">
+    <table>
+        <tr>
+            <th>이름</th>
+            <td>[[${returnDTO.name}]]</td>
+        </tr>
+        <tr>
+            <th>아이디</th>
+            <td>[[${returnDTO.id}]]</td>
+        </tr>
+        <tr>
+            <th>비밀번호</th>
+            <td>
+                <input type="password" name="pwd">
+            </td>
+        </tr>
+        <tr>
+            <th>성별</th>
+            <td>[[${returnDTO.gender}]]</td>
+        </tr>
+        <tr>
+            <th>생년월일</th>
+            <td>[[${returnDTO.birthDate}]]</td>
+        </tr>
+        <tr>
+            <th>전화번호</th>
+            <td><input type="text" name="phone" th:value="${returnDTO.phone}"></td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td>
+                <input type="text" name="addressMain" th:value="${returnDTO.addressMain}">
+            </td>
+        <tr>
+        </tr>
+            <th>상세주소</th>
+            <td>
+                <input type="text" name="addressDetail" th:value="${returnDTO.addressDetail}">
+            </td>
+        </tr>
+    </table>
+    <div onclick="sujung();" style="cursor:pointer;"><a>수정</a></div> <div><a th:href="@{|/manager/member/view/${returnDTO.no}|}">취소</a></div>
+</form>
+</body>
+<script>
+    function sujung() {
+        document.form.submit();
+    }
+</script>
+</html>

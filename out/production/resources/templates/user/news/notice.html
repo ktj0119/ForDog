@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 공지사항</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <style>
+    .container {
+      max-width: 1000px;
+      margin: 80px auto;
+      padding: 40px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f4f1e8;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #faf8f4;
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="container">
+  <h1>공지사항</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>순번</th>
+        <th>작성일</th>
+        <th>작성자</th>
+        <th>조회수</th>
+        <th>제목</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>2025-08-01</td>
+        <td>관리자</td>
+        <td>123</td>
+        <td><a href="#">[공지] 시스템 점검 안내</a></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>2025-07-24</td>
+        <td>운영팀</td>
+        <td>98</td>
+        <td><a href="#">[안내] 리딩자료 신규 등록</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="introBar">
+  <aside class="sidebar">
+    <h3>소개</h3>
+    <a href="/intro/introduce">
+      홈페이지 소개 <i class="fa-solid fa-paw" th:if="${currentPage == 'introduce'}"></i></a>
+    <a href="/intro/map">
+      오시는 길 <i class="fa-solid fa-paw" th:if="${currentPage == 'map'}"></i></a>
+  </aside>
+</div>
+
+<div th:fragment="eduBar">
+  <aside class="sidebar">
+    <h3>교육</h3>
+    <a href="/edu/reading/list">
+      리딩 자료 <i class="fa-solid fa-paw" th:if="${currentPage == 'reading'}"></i>
+    </a>
+    <a href="/edu/media/list">
+      미디어 자료 <i class="fa-solid fa-paw" th:if="${currentPage == 'media'}"></i>
+    </a>
+  </aside>
+</div>
+
+<div th:fragment="guideBar">
+  <aside class="sidebar">
+    <h3>안내</h3>
+    <a href="/guide/volunteer">
+      봉사 안내 <i class="fa-solid fa-paw" th:if="${currentPage == 'volunteer'}"></i></a>
+    <a href="/guide/petRegister">
+      동물 등록 안내 <i class="fa-solid fa-paw" th:if="${currentPage == 'petRegister'}"></i></a>
+    <a href="/guide/shelter">
+      보호소 안내 <i class="fa-solid fa-paw" th:if="${currentPage == 'shelter'}"></i></a>
+  </aside>
+</div>
+
+<div th:fragment="newsBar">
+  <aside class="sidebar">
+    <h3>소식</h3>
+    <a href="/news/notice">
+      공지사항 <i class="fa-solid fa-paw" th:if="${currentPage == 'notice'}"></i></a>
+    <a href="/news/faq">
+      FAQ <i class="fa-solid fa-paw" th:if="${currentPage == 'faq'}"></i></a>
+  </aside>
+</div>
+
+<div th:fragment="mypageBar">
+  <aside class="sidebar">
+    <h3>마이페이지</h3>
+    <a href="/mypage/course">
+      미디어 수강 및 수료 관리 <i class="fa-solid fa-paw" th:if="${currentPage == 'course'}"></i></a>
+    <a href="/mypage/metaverse">
+      메타버스 활동 현황 <i class="fa-solid fa-paw" th:if="${currentPage == 'metaverse'}"></i></a>
+    <a href="/mypage/enterPwd/pwdChange">
+      비밀번호 변경 <i class="fa-solid fa-paw" th:if="${currentPage == 'pwdChange'}"></i></a>
+    <a href="/mypage/enterPwd/memberEdit">
+      회원정보 수정 <i class="fa-solid fa-paw" th:if="${currentPage == 'memberEdit'}"></i></a>
+    <a href="/mypage/enterPwd/remove">
+      회원탈퇴 <i class="fa-solid fa-paw" th:if="${currentPage == 'remove'}"></i></a>
+  </aside>
+</div>
+
+</html>

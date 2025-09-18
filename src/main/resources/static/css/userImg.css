@@ -1,0 +1,31 @@
+.image-section {
+  display: flex;
+  justify-content: space-between;  / 양옆 끝으로 배치 /
+  align-items: center;             / 세로 가운데 정렬 /
+  padding: 20px 40px;              / 안쪽 여백 /
+
+  height: 220px;                   / 영역 높이 /
+  box-sizing: border-box;
+}
+
+.image-section img {
+  width: 590px;      / 이미지 기본 크기 /
+  height: auto;      / 비율 유지 /
+  object-fit: contain;
+  transition: all 0.3s ease; / hover 시 부드럽게 /
+  position: relative; / 위치 조정 가능하게 /
+}
+
+/ 왼쪽 이미지 개별 조정 /
+.image-left {
+  width: 180px;      / 크기 조절 /
+  top: 1px;         / 위로부터 10px /
+  left: -41px;           / 왼쪽 고정 /
+}
+
+/ 오른쪽 이미지 개별 조정 /
+.image-right {
+  width: 220px;      / 크기 조절 /
+  top: 1px;         / 위로 조금 올림 /
+  right: -42px;          / 오른쪽 고정 */
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 리딩 자료</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/paging.css}"/>
+  <style>
+    .container {
+      max-width: 1000px;
+      margin: 80px auto;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filters button {
+      padding: 8px 16px;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .filters button.active {
+      background-color: #ff944d;
+      color: white;
+      border-color: #ff944d;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f4f1e8;
+    }
+
+    tr:nth-child(even) {
+      background-color: #faf8f4;
+    }
+
+    a {
+      color: #333;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="container">
+  <h1>리딩 자료</h1>
+
+  <form method="get" th:action="@{/edu/reading/list}">
+    <div class="filters">
+      <button type="submit" name="searchType"
+              th:class="${searchType == null or searchType == '' ? 'active' : ''}">전체</button>
+
+      <div th:each="group : ${groupList}">
+        <button type="submit" name="searchType" th:value="${group}" th:text="${group}"
+                th:class="${searchType == group ? 'active' : ''}"></button>
+      </div>
+    </div>
+  </form>
+
+  <form method="get" th:action="@{/edu/reading/list}">
+    <input type="hidden" name="page" th:value="${page}"/>
+    <input type="hidden" name="searchType" th:value="${searchType}"/>
+
+    <h3>제목 검색</h3>
+    <input type="text" name="searchKeyword" th:value="${searchKeyword}" placeholder="검색어를 입력하세요">
+    <button type="submit">🔍검색</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>순번</th>
+        <th>분류</th>
+        <th>제목</th>
+        <th>등록일</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr th:each="readingDTO, loop : ${paging}" style="cursor: pointer;"
+        th:onclick="|location.href='@{/edu/reading/view/{no}(no=${readingDTO.no}, page=${page}, searchType=${searchType}, searchKeyword=${searchKeyword})}'|">
+        <td th:text="${totalCount - (paging.number * paging.size) - loop.index}"></td>
+        <td>[[${readingDTO.readingGroup}]]</a></td>
+        <td>[[${readingDTO.subject}]]</td>
+        <td th:text="${#temporals.format(readingDTO.regiDate, 'yyyy-MM-dd')}"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 페이징 -->
+<div th:replace="header/paging :: paging"></div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

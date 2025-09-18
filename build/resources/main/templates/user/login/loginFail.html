@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog - 로그인 실패</title>
+    <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <style>
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          background-color: var(--hover-bg);
+          color: var(--highlight);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          user-select: none;
+        }
+        .message {
+          font-size: 20px;
+          font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="message">로그인 정보를 확인 중입니다...</div>
+
+<script>
+  function loginFail() {
+     setTimeout(function () {
+          alert("아이디 혹은 비밀번호를 확인해주세요.");
+          location.href = "/login/";
+     }, 700);
+   };
+  loginFail();
+</script>
+</body>
+</html>

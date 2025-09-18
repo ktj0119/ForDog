@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 홈페이지 소개</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userImg.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .description {
+      margin-top: 20px;
+      font-size: 18px;
+      line-height: 1.7;
+      letter-spacing: 0.03em;
+    }
+
+    .description p {
+      margin-bottom: 24px;
+    }
+
+    .highlight {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .description {
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #444;
+    }
+
+    .description .highlight {
+      font-weight: bold;
+      color: #d87b47; /* 테마색 */
+    }
+
+    .task-section {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+    .task-section h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      text-align: left;
+      font-weight: bold;
+      color: #333;
+    }
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .task-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .task-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    .task-card img {
+      max-width: 100%;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+    .task-card p {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: introBar"></div>
+
+  <!-- 메인 -->
+  <div class="container">
+    <h1><i class="fa-solid fa-paw"></i> 홈페이지 소개</h1>
+    <div class="description">
+      <p>
+        <span class="highlight">ForDog</span>은 반려동물과 사람이 함께 행복하게 살아가는 세상을 꿈꾸며 탄생한
+        반려동물 종합 정보 플랫폼입니다. 단순한 정보 제공을 넘어, 보호자와 반려동물이 서로를 더 깊이 이해하고,
+        더 나은 삶을 함께 만들어갈 수 있도록 돕는 것을 사명으로 삼고 있습니다.
+      </p>
+      <p>
+        이곳에서는 <strong>보호소 안내</strong>부터 <strong>봉사 활동 참여</strong>, <strong>동물 등록 절차</strong>,
+        <strong>리딩 자료</strong>, <strong>미디어 자료</strong>에 이르기까지 다양한 정보를 한눈에 확인할 수 있습니다.
+        흩어져 있는 반려동물 관련 자료를 한 곳에 모아 사용자가 보다 쉽고 편리하게 접근할 수 있도록 체계적으로 정리하였습니다.
+        이를 통해 초보 보호자부터 오랜 경험을 가진 보호자까지 모두가 유용하게 활용할 수 있는 지식을 제공하고 있습니다.
+      </p>
+      <p>
+        단순히 정보를 나열하는 플랫폼이 아니라,
+        사용자 중심의 설계 철학을 바탕으로 **따뜻하고 직관적인 디자인**을 추구합니다.
+        누구나 복잡한 과정 없이 원하는 정보를 찾을 수 있도록 **간단하고 명확한 사용 흐름**을 갖추고 있으며,
+        반려동물을 처음 맞이하는 보호자도 어렵지 않게 이용할 수 있는 환경을 제공합니다.
+      </p>
+      <p>
+        우리는 반려동물과 함께 살아가는 과정에서 마주하는 다양한 고민과 문제들을 해결할 수 있도록,
+        지속적으로 <strong>최신 트렌드와 실질적인 정보</strong>를 반영하고 있습니다.
+        전문가 칼럼, 보호소 현장의 생생한 소식, 봉사 참여 후기 등 **다양한 관점과 목소리**를 담아내며
+        플랫폼의 콘텐츠를 끊임없이 확장해 나가고 있습니다.
+      </p>
+      <p>
+        또한 반려동물 문화를 선도하는 **커뮤니티 허브**로서의 역할을 목표로 합니다.
+        단순히 정보를 전달하는 것을 넘어, 보호자들이 서로 소통하고 공감하며
+        함께 성장할 수 있는 장을 마련하고자 합니다. 이를 위해 포럼, 사진 공유, 후기 작성 등
+        사용자 참여형 기능을 강화하여 따뜻한 반려동물 문화를 만들어 가고 있습니다.
+      </p>
+      <p>
+        앞으로도 <span class="highlight">ForDog</span>은 단순한 정보 플랫폼을 넘어
+        반려동물과 사람이 함께 행복을 나누는 **동반자 같은 공간**이 될 것을 약속드립니다.
+        작은 발걸음이 모여 큰 변화를 만들어내듯, 저희는 여러분과 함께 더 나은 반려동물 세상을 열어가겠습니다.
+      </p>
+    </div>
+    <!-- 주요업무 섹션 -->
+    <section class="tasks container">
+      <h2>주요업무</h2>
+      <div class="task-grid">
+        <div class="task-card">
+          <img src="/img/ani_work_img01.png" alt="기본 진료">
+          <p>유기·유실동물에 대한 적절한 기본 진료</p>
+        </div>
+        <div class="task-card">
+          <img src="/img/ani_work_img02.png" alt="공고 및 입양">
+          <p>유기·유실동물에 대한 공고, 주인반환, 입양</p>
+        </div>
+        <div class="task-card">
+          <img src="/img/ani_work_img03.png" alt="예방 교육">
+          <p>반려동물에 대한 책임감 고취 및 예방 교육</p>
+        </div>
+        <div class="task-card">
+          <img src="/img/ani_work_img04.png" alt="홍보">
+          <p>동물학대 행위 근절을 위한 동물보호 홍보</p>
+        </div>
+        <div class="task-card">
+          <img src="/img/ani_work_img05.png" alt="중성화">
+          <p>질병예방과 유기동물 감소를 위한 중성화 수술 권장</p>
+        </div>
+        <div class="task-card">
+          <img src="/img/ani_work_img06.png" alt="등록 권장">
+          <p>유기·유실동물 방지를 위한 내장형 동물등록의 권장</p>
+        </div>
+        <div class="task-card">
+          <img src="/img/ani_work_img07.png" alt="등록 권장">
+          <p>보호동물의 위생 및 질병관리를 통한
+            공증보건 향상</p>
+        </div>
+        <div class="task-card">
+          <img src="/img/ani_work_img08.png" alt="등록 권장">
+          <p>입양 동물에 대하여 무료 내장형동물등록
+            시술 및 무료 전염병 간이검사 수행</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div th:replace="header/userBackImg :: userBackIMG"></div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 공지사항</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userPaging.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: newsBar"></div>
+
+  <!-- 메인 -->
+  <div class="container">
+    <h1><i class="fa-solid fa-paw"></i> 공지사항</h1>
+
+    <form class="search" method="get" th:action="@{/news/notice}">
+      <input type="hidden" name="searchType" th:value="${searchType}"/>
+
+      <input type="text" name="searchKeyword" th:value="${searchKeyword}" placeholder="검색어를 입력하세요">
+      <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+    </form>
+
+    <div class="container-body">
+      <div class="list-table">
+        <table>
+          <colgroup>
+            <col style="width: 10%;">
+            <col style="width: 55%;">
+            <col style="width: 10%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th>순번</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>조회수</th>
+            <th>작성일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="noticeDTO, loop:${paging}" style="cursor: pointer;"
+              th:onclick="|location.href='@{/news/notice/{no}(no=${noticeDTO.no}, page=${page}, searchType=${searchType}, searchKeyword=${searchKeyword})}'|">
+            <td th:text="${totalCount - (paging.number * paging.size) - loop.index}"></td>
+            <td>[[${noticeDTO.subject}]]</td>
+            <td>[[${noticeDTO.writer}]]</td>
+            <td>[[${noticeDTO.count}]]</td>
+            <td th:text="${#temporals.format(noticeDTO.regiDate, 'yyyy-MM-dd')}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 페이징 -->
+    <div th:replace="header/userPaging :: userPaging"></div>
+  </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

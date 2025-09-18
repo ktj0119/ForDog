@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 리딩 자료 상세</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <style>
+    .list-container {
+      max-width: 800px;
+      margin: 80px auto 0 auto;
+      padding: 40px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 40px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .list-link {
+      display: inline-block;
+      color: #ff944d;
+      text-decoration: none;
+    }
+
+    .file-link {
+      color: #ff944d;
+      text-decoration: underline;
+    }
+
+    .content {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="list-container">
+  <a class="list-link"
+          th:href="@{|/edu/reading/list?page=${page}&searchType=${searchType}&searchKeyword=${searchKeyword}|}">
+    목록으로
+  </a>
+</div>
+
+<div class="container">
+  <h1>[[${returnDTO.subject}]]</h1>
+  <div class="meta">
+    <span>등록일: </span><span th:text="${#temporals.format(returnDTO.regiDate, 'yyyy-MM-dd')}"></span>
+    <span> / 분류: </span><span th:text="${returnDTO.readingGroup}"></span>
+  </div>
+
+  <div class="content">
+    <p th:text="${returnDTO.content}"></p>
+<!--    p태그 2개는 지워야함 ㅋㅋ-->
+    <p>
+      반려견이 짖는 이유, 꼬리를 흔드는 의미, 사회성 부족 행동 등 다양한 상황에서의
+      반응을 이해하고 올바르게 대응하는 방법을 설명합니다.
+    </p>
+    <p>
+      본 자료는 초보 반려인을 위한 필수 가이드로, 가정 내 문제 행동 예방에도 큰 도움이 됩니다.
+      특히 아이가 있는 가정에서의 반려동물 교육에 효과적인 내용을 담고 있습니다.
+    </p>
+  </div>
+
+  <div th:if="${returnDTO.attachment != null and returnDTO.attachment.length() > 0}" style="margin-top: 20px;">
+    <span>첨부파일: </span>
+    <a th:href="@{/edu/reading/download(filename=${returnDTO.attachment})}" class="file-link"
+       th:text="${filename}" download></a>
+  </div>
+</div>
+
+<!-- 이전글/다음글 -->
+<div class="container">
+  <table>
+    <tr th:if="${prevPost != null}">
+      <th><h2>△ 이전글</h2></th>
+      <td><a class=" list-link"
+             th:href="@{|/edu/reading/view/${prevPost.no}?page=${page}&searchType=${searchType}&searchKeyword=${searchKeyword}|}"
+             th:text="${prevPost.subject}"></a></td>
+    </tr>
+
+    <tr th:if="${nextPost != null}">
+      <th><h2>▽ 다음글</h2></th>
+      <td><a class=" list-link"
+             th:href="@{|/edu/reading/view/${nextPost.no}?page=${page}&searchType=${searchType}&searchKeyword=${searchKeyword}|}"
+             th:text="${nextPost.subject}"></a></td>
+    </tr>
+  </table>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

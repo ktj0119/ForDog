@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog - 회원정보 수정</title>
+    <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+    <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* 메인 영역 */
+        .mypage-main {
+            flex: 1;
+            background: #fff;
+            padding: 40px;
+            margin: 20px;
+        }
+
+        /* 전체 컨테이너 */
+        .mypage-container {
+            display: flex;
+            max-width: 1200px;
+            min-height: 600px;
+            margin: 40px auto;
+            gap: 30px;
+        }
+
+        /* 제목 */
+        .mypage-main h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* 안내 문구 */
+        .mypage-main h2 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 5px; /* input과 살짝 간격 */
+        }
+
+        /* 폼 공통 */
+        .mypage-main form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* 텍스트/비밀번호/전화번호/날짜 입력 */
+        .mypage-main input[type="text"],
+        .mypage-main input[type="password"],
+        .mypage-main input[type="tel"],
+        .mypage-main input[type="date"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        .mypage-main input[type="text"]:focus,
+        .mypage-main input[type="password"]:focus,
+        .mypage-main input[type="tel"]:focus,
+        .mypage-main input[type="date"]:focus {
+            border-color: var(--highlight);
+            outline: none;
+        }
+
+        /* 라디오 버튼 그룹 */
+        .radio-group {
+            display: flex;
+            gap: 20px; /* 남성/여성 간격 */
+            align-items: center;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        /* 주소 입력 + 버튼 */
+        .address-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .address-wrapper input[type="text"] {
+            flex: 1; /* 남은 공간 꽉 채우기 */
+        }
+
+        .address-wrapper input[type="button"] {
+            flex: 0 0 auto; /* 글자 크기만큼만 */
+            padding: 0 12px;
+            height: 38px; /* input 높이와 맞춤 */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .address-wrapper input[type="button"]:hover {
+            background: var(--accent-dark);
+        }
+
+        /* 제출 버튼 */
+        .mypage-main button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--highlight);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .mypage-main button:hover {
+            background: var(--highlight-dark);
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<div class="mypage-container">
+    <!-- 마이페이지 바 -->
+    <div th:replace="header/userSideBar :: mypageBar"></div>
+
+    <!-- 메인 -->
+    <main class="mypage-main">
+        <h1>회원정보 수정</h1>
+        <div>
+            <form name="form" method="post" action="/mypage/memberEditProc">
+                <h2>이름</h2>
+                <input type="text" id="name" name="name" th:value="${memberDTO.name}" required>
+
+                <h2>성별</h2>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" id="male" name="gender" value="남성"
+                               th:checked="${memberDTO.gender == '남성'}" required> 남성
+                    </label>
+                    <label>
+                        <input type="radio" id="female" name="gender" value="여성"
+                               th:checked="${memberDTO.gender == '여성'}"> 여성
+                    </label>
+                </div>
+
+                <h2>생년월일</h2>
+                <input type="date" id="birthDate" name="birthDate" th:value="${memberDTO.birthDate}" required>
+
+                <h2>전화번호</h2>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}"
+                       placeholder="예: 02-123-4567 또는 010-1234-5678"
+                       th:value="${memberDTO.phone}" required>
+
+                <h2>주소</h2>
+                <div class="address-wrapper">
+                    <input type="text" id="location_address" name="addressMain" placeholder="주소"
+                           th:value="${memberDTO.addressMain}" required readonly>
+                    <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" title="우편번호 찾기">
+                </div>
+                <input type="text" id="location_detailAddress" name="addressDetail" placeholder="상세주소"
+                       th:value="${memberDTO.addressDetail}">
+
+                <button type="submit">확인</button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

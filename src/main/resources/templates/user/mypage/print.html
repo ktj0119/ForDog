@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <style>
+    @media print {
+        @page {
+            size:210mm 297mm;	/* 실제 인쇄용지 크기 지정 */
+            margin:0mm
+        }
+
+        /* 프린트할때 background-color 나오게 하기 */
+        * {
+            -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
+            color-adjust: exact !important;                 /* Firefox 48 – 96 */
+            print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
+        }
+
+        /* 프린트할때 아래쪽에 빈페이지 생기는것 방지 : height: auto; */
+        body {
+            margin: 0;
+            padding: 0;
+            height: auto;
+            margin-top: 170px;	/* 아래 pop_from_fix 의 margin-top을 적절히 조절해서 위치를 조정한다. */
+        }
+
+        .pop_from_fix { transform: scale(1.35); margin-top: 170px; }
+
+        .pop_from_fix_btn { display:none; }	/* 프린트할때 버튼 숨기기 */
+    }
+
+    /* 수료증 출력 */
+    .pop_from_fix { position:relative; margin: 0 auto; width: 550px; height:778px; background:url("/img/print-bg.jpg") no-repeat center / contain; box-sizing: border-box; padding:80px; }
+    .pop_from_fix .p_desc1 { font-size:14px; margin: 0;}
+    .pop_from_fix h3 { font-weight:600; text-align:center; font-size:30px; margin-top: 30px; }
+    .pop_from_fix dl { width: 100%; display: flex; flex-wrap: wrap; margin-top: 50px;}
+    .pop_from_fix dl > dt { width: 25%; height: 25px; font-weight: 600;}
+    .pop_from_fix dl > dd { width: 75%; height: 25px; margin-left: 0;}
+
+    .pop_from_fix .text_c { text-align: center;}
+    .pop_from_fix .p_desc2 { padding-top: 10px; text-align: center; line-height: 250%; }
+    .pop_from_fix .p_desc3 { padding-top: 30px; text-align: center;}
+    .pop_from_fix h4 { padding-top: 10px; font-weight:600;text-align:center; font-size:1.1em; position: relative;}
+    .pop_from_fix .main-logo { width: 50px; height: 50px; text-align-last: center; }
+
+    .pop_from_fix_btn { text-align: center;}
+    .pop_from_fix_btn a { display: inline-block; line-height: 26px; text-align: center; padding: 0 20px; background-color: #000; color: #fff; font-weight: 600; font-size: 14px; text-decoration: none;}
+    .pop_from_fix_btn a:first-child { background-color: #2a2e87;}
+
+    table.pop_from {   font-size:12px; border-collapse:collapse; width:100%; border:0px; border-top:2px solid #2b528d; border-bottom:1px solid #ddd; margin-bottom:20px; }
+    table.pop_from th { border:0px; border-top:1px solid #ddd;  padding:10px 0px 10px 0px; background:#f9f9f9; color:#4d5358;  text-align:center;}
+    table.pop_from td { border:0px; border-top:1px solid #ddd; padding:10px;  color:#666; text-align:left;}
+
+    .pop_from_fix .box_in { position:relative; text-align:center; width:440px; margin:0 auto; z-index:10 !important; height:100px;}
+    .pop_from_fix .box_in h4 { z-index:100 !important; position:relative; line-height:100px; }
+    .pop_from_fix .cl_bt1 { position:absolute; top:0; width: 100%; z-index:10 !important; }
+    .pop_from_fix .cl_bt2 { position:absolute; top:-10px; right: 30px; z-index:5 !important;}
+
+    .pop_from_fix02 {width:98%; height:auto; margin:0 auto;}
+    .pop_from_fix02 h4 {font-weight:500;text-align:center; font-size:1.1em;padding:10px 0;}
+
+    .bottom_logo { display: flex; justify-content: center; align-items: center; padding-top: 20px; font-size: 20px; }
+  </style>
+</head>
+<body>
+<div class="pop_from_fix">
+  <p class="p_desc1">제 [[${#temporals.format(mediaCompletionDTO.statusDate, 'yy-MM')}]] 호</p>
+  <h3>수 료 증</h3>
+  <dl>
+    <dt>성&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;명</dt>
+    <dd>[[${mediaCompletionDTO.member.name}]]</dd>
+    <dt>생&nbsp;년&nbsp;월&nbsp;일</dt>
+    <dd>[[${#dates.format(mediaCompletionDTO.member.birthDate, 'yyyy-MM-dd')}]]</dd>
+    <dt>강&nbsp;&nbsp;&nbsp;의&nbsp;&nbsp;&nbsp;명</dt>
+    <dd>[[${mediaCompletionDTO.mediaGroup.name}]]</dd>
+    <dt>수&nbsp;료&nbsp;일&nbsp;자</dt>
+    <dd>[[${#temporals.format(mediaCompletionDTO.statusDate, 'yyyy-MM-dd')}]]</dd>
+  </dl>
+  <p class="p_desc2">귀하는 ForDog 사업단이 실시한<br>
+    「 [[${mediaCompletionDTO.mediaGroup.name}]] 」의 <br>
+    전 과정을 이수하였으므로 이 증서를 드립니다. </p>
+  <p class="p_desc3">[[${#dates.format(#dates.createNow(), 'yyyy년 MM월 dd일')}]]</p>
+  <h4><div class="cl_bt1">ForDog 사업단장 조 해 진</div><div class="cl_bt2"><img src="/img/print-sign.png"  width="50px" alt="" /></div></h4>
+  <div class="bottom_logo"><img class="main-logo" src="/img/print-logo.png" alt=""> ForDog</div>
+
+</div>
+
+<div class="pop_from_fix_btn">
+  <a href="javascript:window.print()">인쇄하기</a>
+  <a href="javascript:window.close()">닫기</a>
+</div>
+</body>
+</html>

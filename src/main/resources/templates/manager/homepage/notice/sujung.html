@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Notice</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/homepageAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>공지사항 수정</h2>
+            <form id="form" name="form" method="post" action="/manager/homepage/notice/sujungProc">
+                <input type="hidden" name="no" th:value="${returnDTO.no}">
+                <div class="vertical-table">
+                <table>
+                    <tr>
+                        <th>제목</th>
+                        <td><input type="text" name="subject" th:value="${returnDTO.subject}" required></td>
+                    </tr>
+                    <tr>
+                        <th>작성자</th>
+                        <td><input type="text" name="writer" th:value="${returnDTO.writer}" required></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td>
+                            <textarea name="content" required>[[${returnDTO.content}]]</textarea>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+                <div class="btn-box">
+                    <button type="button" onclick="sujung();">수정</button>
+                    <button type="button" class="btn-cancel"
+                            th:onclick="location.href='/manager/homepage/notice/view/' + [[${returnDTO.no}]];">
+                        취소
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('form');
+
+    function sujung() {
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            alert('입력되지 않은 정보가 있습니다. 다시 입력해 주세요.');
+        }
+    }
+</script>
+</body>
+</html>

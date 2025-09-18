@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Shelter</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<!-- 전체 레이아웃 -->
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/homepageAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>보호소 등록</h2>
+            <form id="form" name="form" method="post" action="/manager/homepage/shelter/chugaProc">
+                <div class="vertical-table">
+                    <table>
+                        <tr>
+                            <th>보호센터명</th>
+                            <td><input type="text" name="shelterName" required></td>
+                        </tr>
+                        <tr>
+                            <th>관할구역</th>
+                            <td><select name="region">
+                                <option value="" th:selected="${region == null}">전체</option>
+                                <option value="서울특별시" th:selected="${region == '서울특별시'}">서울특별시</option>
+                                <option value="부산광역시" th:selected="${region == '부산광역시'}">부산광역시</option>
+                                <option value="대구광역시" th:selected="${region == '대구광역시'}">대구광역시</option>
+                                <option value="인천광역시" th:selected="${region == '인천광역시'}">인천광역시</option>
+                                <option value="광주광역시" th:selected="${region == '광주광역시'}">광주광역시</option>
+                                <option value="대전광역시" th:selected="${region == '대전광역시'}">대전광역시</option>
+                                <option value="울산광역시" th:selected="${region == '울산광역시'}">울산광역시</option>
+                                <option value="세종특별자치시" th:selected="${region == '세종특별자치시'}">세종특별자치시</option>
+                                <option value="경기도" th:selected="${region == '경기도'}">경기도</option>
+                                <option value="강원특별자치도" th:selected="${region == '강원특별자치도'}">강원특별자치도</option>
+                                <option value="충청북도" th:selected="${region == '충청북도'}">충청북도</option>
+                                <option value="충청남도" th:selected="${region == '충청남도'}">충청남도</option>
+                                <option value="전북특별자치도" th:selected="${region == '전북특별자치도'}">전북특별자치도</option>
+                                <option value="전라남도" th:selected="${region == '전라남도'}">전라남도</option>
+                                <option value="경상북도" th:selected="${region == '경상북도'}">경상북도</option>
+                                <option value="경상남도" th:selected="${region == '경상남도'}">경상남도</option>
+                                <option value="제주특별자치도" th:selected="${region == '제주특별자치도'}">제주특별자치도</option>
+                            </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>전화번호</th>
+                            <td><input type="text" name="phone" required></td>
+                        </tr>
+                        <tr>
+                            <th>주소</th>
+                            <td><input type="text" id="location_address" name="addressMain" placeholder="주소" required
+                                       readonly>
+                                <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"
+                                       style="cursor: pointer;">
+                                <br>
+                                <input type="text" id="location_detailAddress" name="addressDetail" placeholder="상세주소">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="btn-box">
+                    <button type="button" onclick="chuga();">등록</button>
+                    <button type="button" class="btn-cancel"
+                            onclick="location.href='/manager/homepage/shelter/list';">취소
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('form');
+
+    function chuga() {
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            alert('입력되지 않은 정보가 있습니다. 다시 입력해 주세요.');
+        }
+    }
+</script>
+<!-- 다음 주소 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function execDaumPostcode() {
+      new daum.Postcode({
+        oncomplete: function(data) {
+          let addr = '';
+          let extraAddr = '';
+
+          if (data.userSelectedType === 'R') {
+            addr = data.roadAddress;
+          } else {
+            addr = data.jibunAddress;
+          }
+
+          if(data.userSelectedType === 'R'){
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+              extraAddr += data.bname;
+            }
+
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+
+            if(extraAddr !== ''){
+              extraAddr = ' (' + extraAddr + ')';
+            }
+          }
+
+          const fullAddr = addr + ' (' + data.zonecode + ')' + extraAddr;
+          document.getElementById("location_address").value = fullAddr;
+          document.getElementById("location_detailAddress").focus();
+        }
+      }).open();
+    }
+</script>
+</body>
+</html>

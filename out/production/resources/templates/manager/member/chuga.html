@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Member</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<form name="form" action="/manager/member/chugaProc" method="post">
+    <table>
+        <tr>
+            <th>아이디</th>
+            <td><input type="text" name="id"></td>
+        </tr>
+        <tr>
+            <th>비밀번호</th>
+            <td>
+                <input type="password" id="password" name="pwd"
+                       pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}"
+                       required>
+                <br>
+                <span>영문, 숫자, 특수문자 포함 8 ~ 20자로 입력해주세요</span>
+            </td>
+        </tr>
+        <tr>
+            <th>비밀번호 확인</th>
+            <td>
+                <input type="password" id="password2" name="password2"
+                       pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}" required>
+                <input type="button" id="password2-check" value="일치 확인" style="cursor: pointer;">&nbsp
+                <p id="password-message" style="color:red; display:none;"></p>
+            </td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <th>생년월일</th>
+            <td><input type="date" name="birthDate"></td>
+        </tr>
+        <tr>
+            <th>성별</th>
+            <td>
+                <select th:name="gender">
+                    <option selected>===선택===</option>
+                    <option th:value="남" th:text="남자"></option>
+                    <option th:value="여" th:text="여자"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>전화번호</th>
+            <td><input type="text" name="phone"></td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td><input type="text" name="addressMain"></td>
+        </tr>
+        <tr>
+            <th>상세주소</th>
+            <td><input type="text" name="addressDetail"></td>
+        </tr>
+        <tr>
+            <th>구분</th>
+            <td>
+                <select th:name="admin">
+                    <option selected>===선택===</option>
+                    <option th:value="0" th:text="회원"></option>
+                    <option th:value="1" th:text="관리자"></option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <div onclick="chuga();" style="cursor:pointer;"><a>등록</a></div> <div><a href="/manager/member/list">취소</a></div>
+</form>
+
+</body>
+<script>
+    const password = document.getElementById('password');
+    const password2 = document.getElementById('password2');
+    const button = document.getElementById('password2-check');
+    const passwordMessage = document.getElementById('password-message');
+
+    button.addEventListener('click', function() {
+
+    if (!password.checkValidity()) {
+    passwordMessage.style.display = 'inline';
+    passwordMessage.style.color = "red";
+    passwordMessage.textContent = "비밀번호 형식이 맞지 않습니다.";
+    return;
+    }
+
+    if (password.value !== password2.value) {
+    passwordMessage.style.display = 'inline';
+    passwordMessage.style.color = "red";
+    passwordMessage.textContent = "비밀번호가 일치하지 않습니다.";
+    } else {
+    passwordMessage.style.display = 'inline';
+    passwordMessage.style.color = "green";
+    passwordMessage.textContent = "비밀번호가 일치합니다.";
+    }
+    });
+
+    function chuga() {
+        document.form.submit();
+    }
+</script>
+</html>

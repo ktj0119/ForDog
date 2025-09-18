@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 봉사 안내</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userImg.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .round-container {
+  position: relative;
+  padding: 60px 40px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+
+  /* 배경 2개 + 색상 레이어 */
+  background-image:
+    linear-gradient(rgba(216,123,71,0.6), rgba(216,123,71,0.6)),
+    url('/img/bg_linedog.png/'),
+    url('/img/bg_linecat.png/');
+  background-size: cover, 200px, 200px;
+  background-position: center, top right, top left;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-blend-mode: overlay; /* 색상 입히기 */
+
+
+}
+
+   .icon {
+     font-size: 50px;
+     margin-bottom: 25px;
+   }
+
+     .content-section {
+           margin-bottom: 40px;
+         }
+         .content-section h2 {
+           font-size: 24px;
+           margin-bottom: 15px;
+           color: var(--highlight-dark);
+         }
+         .content-section h3 {
+           font-size: 20px;
+           margin: 15px 0 10px;
+           color: var(--text-dark);
+         }
+         .content-section p, .content-section li {
+           font-size: 17px;
+           line-height: 1.7;
+           margin-bottom: 10px;
+         }
+
+   .description {
+     font-size: 18px;
+     line-height: 1.7;
+     margin-bottom: 40px;
+     letter-spacing: 0.05em;
+   }
+
+   .btn {
+     display: inline-block;
+     padding: 14px 38px;
+     background-color: var(--highlight);
+     color: white;
+     border-radius: 8px;
+     font-size: 18px;
+     font-weight: 600;
+     text-decoration: none;
+     transition: background-color 0.3s ease;
+     box-shadow: 0 4px 8px rgba(216,123,71,0.4);
+   }
+
+   .btn:hover {
+     background-color: var(--highlight-dark);
+     box-shadow: 0 6px 12px rgba(184,96,45,0.6);
+   }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: guideBar"></div>
+
+  <div class="round-container">
+    <div class="icon">🐾</div>
+    <h1 style="color: var(--text-dark);">봉사 안내</h1>
+
+    <!-- 소개 -->
+    <div class="content-section">
+      <p>반려동물 보호소에서 따뜻한 손길을 기다리는 친구들을 만나보세요.<br>
+        봉사활동은 단순한 도움이 아닌, <strong>새로운 인연과 감동</strong>을 만들어줍니다.</p>
+      <p>봉사활동은 반려동물의 삶을 바꾸고, 사람과 동물이 함께 성장하는 경험이 됩니다.</p>
+    </div>
+
+    <!-- 봉사 참여 방법 -->
+    <div class="content-section">
+      <h2>봉사 참여 방법</h2>
+      <ul>
+        <li><strong>1365 자원봉사 포털</strong>에서 신청</li>
+        <li>보호소 홈페이지 또는 지역 지자체 공고 확인</li>
+        <li>전화 문의 및 현장 접수 가능</li>
+      </ul>
+    </div>
+
+    <!-- 봉사 활동 내용 -->
+    <div class="content-section">
+      <h2>봉사 활동 내용</h2>
+      <ul>
+        <li>보호소 청소 및 위생 관리</li>
+        <li>반려동물 산책 및 사회화 활동</li>
+        <li>먹이 급여, 목욕, 건강 관리 보조</li>
+        <li>입양 행사 지원 및 홍보 활동</li>
+      </ul>
+    </div>
+
+    <!-- 봉사 전 유의사항 -->
+    <div class="content-section">
+      <h2>봉사 전 유의사항</h2>
+      <ol>
+        <li>활동 가능한 복장과 편한 신발 착용</li>
+        <li>안전 수칙 및 보호소 지침 준수</li>
+        <li>미성년자의 경우 보호자 동의 필요</li>
+      </ol>
+    </div>
+
+    <!-- 봉사의 의미 -->
+    <div class="content-section">
+      <h2>봉사의 의미</h2>
+      <p>봉사는 단순한 도움이 아니라, 동물에게는 <strong>새로운 가족을 만날 기회</strong>이고,
+        봉사자에게는 <strong>삶의 보람과 따뜻한 경험</strong>을 주는 소중한 시간입니다.</p>
+    </div>
+
+    <!-- 버튼 -->
+    <a href="https://www.1365.go.kr" target="_blank" class="btn">1365 봉사하러 가기</a>
+  </div>
+</main>
+
+<div th:replace="header/userBackImg :: userBackIMG"></div>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

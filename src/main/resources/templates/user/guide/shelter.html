@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 보호소 안내</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/userPaging.css}"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    div[th\\:replace$="userFooter"] {
+      flex-shrink: 0;
+    }
+
+    /* 검색창 스타일 */
+    .search-area {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .tit {
+      flex: 0 0 50px;
+      font-weight: 600;
+      color: var(--highlight);
+      margin-bottom: 0;
+    }
+
+    .slt_box select,
+    .input_box input {
+      flex: 1 1 220px;
+      padding: 8px 12px;
+      font-size: 15px;
+      border: 1.5px solid var(--highlight);
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .slt_box select:focus,
+    .input_box input:focus {
+      border-color: var(--highlight-dark);
+    }
+
+    button {
+      background-color: var(--highlight);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      flex-shrink: 0;
+    }
+
+    button:hover {
+      background-color: var(--highlight-dark);
+    }
+/*
+   .map-container {
+  height: 400px;         /* 기본 높이 */
+  position: sticky;      /* 스크롤 시 고정 */
+  top: 80px;             /* 상단에서 떨어질 간격 */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background-color: #fff;
+  overflow: hidden;
+}
+*/
+
+.map-container-wrapper {
+  position: relative;
+  width: 100%;
+  height: 0; /* 부모 높이 없앰, 오직 자식 absolute가 나타날 공간 */
+}
+
+.map-container {
+  position: absolute; /* 화면 위로 겹치게 */
+  top: 60%;             /* 부모 기준 위치 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 400px;      /* 지도 높이 */
+  display: none;
+  background-color: #fff;
+  z-index: 999;       /* 다른 콘텐츠 위로 올리기 */
+  border: 1px solid var(--highlight);
+}
+
+.map-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff !important;
+  color: var(--highlight) !important;
+}
+
+    /* 지도 CSS */
+    .center_map .illust_map .marker {
+        opacity: 0;
+        visibility: hidden;
+        -webkit-transform: translateY(-2rem);
+        transform: translateY(-2rem);
+        -webkit-transition: .25s ease;
+        transition: .25s ease;
+    }
+
+    .center_map .illust_map [class^="group"]:hover .marker, .center_map .illust_map .active[class^="group"] .marker {
+        opacity: 1;
+        visibility: visible;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        -webkit-transition-delay: .2s;
+        transition-delay: .2s;
+    }
+
+    .center_map {
+        display: table;
+        width: 100%;
+        height: 100%;
+        table-layout: fixed;
+    }
+
+    .center_map .illust_map {
+        display: table-cell;
+        height: 300px;
+        vertical-align: middle;
+    }
+
+    .center_map .illust_map .shadow {
+        fill: #ebebeb;
+    }
+
+    .center_map .illust_map .st1 {
+        fill: #fff;
+        stroke: #bababa;
+        stroke-width: 1;
+    }
+
+    .center_map .illust_map .st2 {
+        fill: #333333;
+    }
+
+    .center_map .illust_map .st3 {
+        fill: #FFFFFF;
+        font-weight: 500;
+        font-size: 18px;
+        letter-spacing: -0.03em;
+    }
+
+    .center_map .illust_map [class^="group"] {
+        cursor: pointer;
+    }
+
+    .center_map .illust_map [class^="group"] .st1 {
+        -webkit-transition: .2s;
+        transition: .2s;
+    }
+
+    .center_map .illust_map [class^="group"]:hover, .center_map .illust_map [class^="group"].active {
+        z-index: 99;
+    }
+
+    .center_map .illust_map [class^="group"]:hover .st1, .center_map .illust_map [class^="group"].active .st1 {
+    /* 지도 호버 색상 */
+        fill: var(--highlight);
+        stroke: #707070;
+    }
+
+    /* 반응형 */
+    @media (max-width: 900px) {
+      .main-content {
+        flex-direction: column;
+      }
+
+      .map-container {
+        width: 100%;
+        height: 300px;
+        margin-top: 20px;
+      }
+    }
+
+    /* 테이블 스타일 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: var(--hover-bg);
+      color: var(--highlight);
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    table tr:nth-child(odd) {
+      background-color: var(--hover-bg);
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 리스트 + 지도 -->
+<main>
+  <!-- 마이페이지 바 -->
+  <div th:replace="header/userSideBar :: guideBar"></div>
+
+    <div class="container">
+      <h1><i class="fa-solid fa-paw"></i> 보호소 안내</h1>
+
+      <!-- 검색창 -->
+      <form name="cmmnForm" method="get" action="/guide/shelter" class="search-area">
+        <div class="tit">시/도</div>
+        <div class="slt_box">
+          <select name="searchType" id="searchType">
+            <option value="" th:selected="${searchType == null}">전체</option>
+            <option value="서울특별시" th:selected="${searchType == '서울특별시'}">서울특별시</option>
+            <option value="부산광역시" th:selected="${searchType == '부산광역시'}">부산광역시</option>
+            <option value="대구광역시" th:selected="${searchType == '대구광역시'}">대구광역시</option>
+            <option value="인천광역시" th:selected="${searchType == '인천광역시'}">인천광역시</option>
+            <option value="광주광역시" th:selected="${searchType == '광주광역시'}">광주광역시</option>
+            <option value="대전광역시" th:selected="${searchType == '대전광역시'}">대전광역시</option>
+            <option value="울산광역시" th:selected="${searchType == '울산광역시'}">울산광역시</option>
+            <option value="세종특별자치시" th:selected="${searchType == '세종특별자치시'}">세종특별자치시</option>
+            <option value="경기도" th:selected="${searchType == '경기도'}">경기도</option>
+            <option value="강원특별자치도" th:selected="${searchType == '강원특별자치도'}">강원특별자치도</option>
+            <option value="충청북도" th:selected="${searchType == '충청북도'}">충청북도</option>
+            <option value="충청남도" th:selected="${searchType == '충청남도'}">충청남도</option>
+            <option value="전북특별자치도" th:selected="${searchType == '전북특별자치도'}">전북특별자치도</option>
+            <option value="전라남도" th:selected="${searchType == '전라남도'}">전라남도</option>
+            <option value="경상북도" th:selected="${searchType == '경상북도'}">경상북도</option>
+            <option value="경상남도" th:selected="${searchType == '경상남도'}">경상남도</option>
+            <option value="제주특별자치도" th:selected="${searchType == '제주특별자치도'}">제주특별자치도</option>
+          </select>
+        </div>
+        <div class="tit">센터명</div>
+        <div class="input_box">
+          <input name="searchKeyword" id="searchKeyword" placeholder="검색어를 입력하세요." type="text" th:value="${searchKeyword}">
+        </div>
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> 검색</button>
+        <button type="button" onclick="toggleMap()">지도 보기</button>
+      </form>
+
+      <div class="map-container-wrapper">
+        <div class="map-container" th:replace="header/userShelterMap :: userShelterMap"></div>
+      </div>
+
+      <!-- 보호소 안내 리스트 -->
+      <table>
+        <colgroup>
+          <col style="width: 8%;">
+          <col style="width: 17%;">
+          <col style="width: 20%;">
+          <col style="width: 15%;">
+          <col style="width: 40%">
+        </colgroup>
+        <thead>
+        <tr>
+          <th>순번</th>
+          <th>시/도</th>
+          <th>센터명</th>
+          <th>전화번호</th>
+          <th>주소</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr th:each="shelterDTO, loop:${list}">
+            <td>[[${shelterDTO.no}]]</td>
+            <td>[[${shelterDTO.region}]]</td>
+            <td>[[${shelterDTO.shelterName}]]</td>
+            <td>[[${shelterDTO.phone}]]</td>
+            <td>[[${shelterDTO.address}]]</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 페이징 -->
+      <div th:replace="header/userPaging :: userPaging"></div>
+    </div>
+
+  <form name="mapForm" method="get" action="/guide/shelter">
+    <input type="hidden" name="searchType" id="mapSearchType">
+  </form>
+
+</main>
+
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<script>
+  function fn_click(svgElement) {
+    const areaName = svgElement.getAttribute("data-name");
+    const form = document.forms["mapForm"];
+    const input = document.getElementById("mapSearchType");
+
+    input.value = areaName;
+    form.submit();
+  }
+
+  function toggleMap() {
+    const map = document.querySelector('.map-container');
+    if (map.style.display === 'none' || map.style.display === '') {
+      map.style.display = 'block';
+    } else {
+      map.style.display = 'none';
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const map = document.querySelector('.map-container');
+    map.style.display = 'none'; // 초기 상태 숨김
+  });
+</script>
+</body>
+</html>

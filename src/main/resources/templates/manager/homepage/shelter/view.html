@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Shelter - 상세보기</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<!-- 전체 레이아웃 -->
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/homepageAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>보호센터 상세보기</h2>
+            <div class="vertical-table">
+            <table>
+                <tr>
+                    <th>번호</th>
+                    <td>[[${returnDTO.no}]]</td>
+                </tr>
+                <tr>
+                    <th>보호센터명</th>
+                    <td>[[${returnDTO.shelterName}]]</td>
+                </tr>
+                <tr>
+                    <th>관할구역</th>
+                    <td>[[${returnDTO.region}]]</td>
+                </tr>
+                <tr>
+                    <th>전화번호</th>
+                    <td>[[${returnDTO.phone}]]</td>
+                </tr>
+                <tr>
+                    <th>주소</th>
+                    <td>[[${returnDTO.address}]]</td>
+                </tr>
+            </table>
+            </div>
+            <div class="btn-box">
+                <button type="button" class="btn-link" onclick="location.href='/manager/homepage/shelter/list'">목록</button>
+
+                <button type="button" class="btn-link"
+                        th:onclick="location.href='/manager/homepage/shelter/sujung/[[${returnDTO.no}]]'">수정</button>
+
+                <button type="button" class="btn-link btn-cancel" onclick="sakje();">삭제</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sakje() {
+        if (confirm("삭제하시겠습니까?")) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/manager/homepage/shelter/sakjeProc';
+
+            const inputNo = document.createElement('input');
+            inputNo.type = 'hidden';
+            inputNo.name = 'no';
+            inputNo.value = '[[${returnDTO.no}]]';
+            form.appendChild(inputNo);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+</body>
+</html>

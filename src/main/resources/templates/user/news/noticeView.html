@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog - 공지사항 상세</title>
+    <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+    <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+    <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+    <!-- 마이페이지 바 -->
+    <div th:replace="header/userSideBar :: newsBar"></div>
+
+    <!-- 메인 -->
+    <div class="container">
+        <div>
+            <a class="list-link"
+               th:href="@{|/news/notice?page=${page}&searchType=${searchType}&searchKeyword=${searchKeyword}|}">
+                목록으로
+            </a>
+        </div>
+
+        <h2>[[${returnDTO.subject}]]</h2>
+
+        <div class="container-body">
+            <div class="meta">
+                <span>등록일: </span><span th:text="${#temporals.format(returnDTO.regiDate, 'yyyy-MM-dd')}"></span>
+                <span> / 작성자: </span><span th:text="${returnDTO.writer}"></span>
+                <span> / 조회수: </span><span th:text="${returnDTO.count + 1}"></span>
+            </div>
+
+            <hr>
+
+            <div class="content">
+                <p th:utext="${returnDTO.content}"></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- 이전글/다음글 -->
+        <div class="prenxt-table">
+            <table>
+                <tr th:if="${prevPost != null}">
+                    <th><h3 style="color: var(--text-dark); margin-bottom: 0;">이전글 : </h3></th>
+                    <td><a class="prenxt-link"
+                           th:href="@{|/news/notice/${prevPost.no}?page=${page}&searchType=${searchType}&searchKeyword=${searchKeyword}|}"
+                           th:text="${prevPost.subject}"></a></td>
+                </tr>
+                <tr th:if="${prevPost == null}">
+                    <th><h3 style="color: var(--text-dark); margin-bottom: 0;">이전글 : </h3></th>
+                    <td><a class="prenxt-nolink">이전글이 없습니다.</a></td>
+                </tr>
+
+                <tr th:if="${nextPost != null}">
+                    <th><h3 style="color: var(--text-dark); margin-bottom: 0;">다음글 : </h3></th>
+                    <td><a class="prenxt-link"
+                           th:href="@{|/news/notice/${nextPost.no}?page=${page}&searchType=${searchType}&searchKeyword=${searchKeyword}|}"
+                           th:text="${nextPost.subject}"></a></td>
+                </tr>
+                <tr th:if="${nextPost == null}">
+                    <th><h3 style="color: var(--text-dark); margin-bottom: 0;">다음글 : </h3></th>
+                    <td><a class="prenxt-nolink" style="text-decoration: none;">다음글이 없습니다.</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+</body>
+</html>

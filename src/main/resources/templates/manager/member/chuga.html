@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Member</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/memberAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>회원 등록</h2>
+            <form id="form" name="form" action="/manager/member/chugaProc" method="post">
+                <input type="hidden" name="admin" value="0">
+                <div class="vertical-table">
+                <table>
+                    <tr>
+                        <th style="width:200px;">아이디</th>
+                        <td>
+                            <input type="email" id="email" name="id" required>
+                            <p id="email-message" style="color:red; display:none;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호</th>
+                        <td>
+                            <input type="password" id="password" name="pwd"
+                                   pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}"
+                                   required>
+                            <br>
+                            <span>영문, 숫자, 특수문자 포함 8 ~ 20자로 입력해주세요</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호 확인</th>
+                        <td>
+                            <input type="password" id="password2" name="password2"
+                                   pattern="(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}" required>
+                            <input type="button" id="password2-check" value="일치 확인" style="cursor: pointer;">&nbsp
+                            <p id="password-message" style="color:red; display:none;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td>
+                            <input type="text" id="name" name="name" required>
+                            <p id="name-message" style="color:red; display:none;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>생년월일</th>
+                        <td>
+                            <input type="date" id="birthDate" name="birthDate" required>
+                            <p id="birthDate-message" style="color:red; display:none;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>성별</th>
+                        <td>
+                            <select id="gender" th:name="gender" required>
+                                <option value="" selected>===선택===</option>
+                                <option th:value="남" th:text="남자"></option>
+                                <option th:value="여" th:text="여자"></option>
+                            </select>
+                            <p id="gender-message" style="color:red; display:none;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>전화번호</th>
+                        <td>
+                            <input type="tel" id="phone" name="phone" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}"
+                                   placeholder="예: 02-123-4567 또는 010-1234-5678" required>
+                            <p id="phone-message" style="color:red; display:none;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td>
+                            <input type="text" id="location_address" name="addressMain" placeholder="주소" required readonly>
+                            <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" style="cursor: pointer;">
+                            <p id="address-message" style="color:red; display:none;"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>상세주소</th>
+                        <td>
+                            <input type="text" id="location_detailAddress" name="addressDetail" placeholder="상세주소">
+                        </td>
+                    </tr>
+<!--                    <tr>-->
+<!--                        <th>구분</th>-->
+<!--                        <td>-->
+<!--                            <select th:name="admin" required>-->
+<!--                                <option selected>선택</option>-->
+<!--                                <option value="0">회원</option>-->
+<!--                                <option value="1">관리자</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+                </table>
+                </div>
+                <div class="btn-box">
+                    <button type="button" onclick="chuga();">등록</button>
+                    <button type="button" class="btn-cancel"
+                            onclick="location.href='/manager/member/list';">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const password2 = document.getElementById('password2');
+    const button = document.getElementById('password2-check');
+    const name = document.getElementById('name');
+    const birthDate = document.getElementById('birthDate');
+    const gender = document.getElementById('gender');
+    const phone = document.getElementById('phone');
+    const address = document.getElementById('location_address');
+
+    const emailMessage = document.getElementById('email-message');
+    const passwordMessage = document.getElementById('password-message');
+    const nameMessage = document.getElementById('name-message');
+    const birthDateMessage = document.getElementById('birthDate-message');
+    const genderMessage = document.getElementById('gender-message');
+    const phoneMessage = document.getElementById('phone-message');
+    const addressMessage = document.getElementById('address-message');
+    const form = document.getElementById('form');
+
+    // 등록 함수
+    function chuga() {
+        let valid = true;
+
+        // 이메일 체크
+        if (!email.checkValidity()) {
+            emailMessage.style.display = 'inline';
+            emailMessage.style.color = "red";
+            emailMessage.textContent = "이메일 형식이 맞지 않습니다.";
+            valid = false;
+        } else {
+            emailMessage.style.display = 'none';
+        }
+
+        // 비밀번호 체크
+        if (password.value == "") {
+            passwordMessage.style.display = 'inline';
+            passwordMessage.style.color = "red";
+            passwordMessage.textContent = "비밀번호를 입력해주세요.";
+            valid = false;
+        }
+
+        // 비밀번호 일치 확인
+        if (password.value !== password2.value) {
+            passwordMessage.style.display = 'inline';
+            passwordMessage.style.color = "red";
+            passwordMessage.textContent = "비밀번호가 일치하지 않습니다.";
+            valid = false;
+        }
+
+        // 이름 체크
+        if (!name.checkValidity()) {
+            nameMessage.style.display = 'inline';
+            nameMessage.style.color = "red";
+            nameMessage.textContent = "이름을 입력하세요.";
+            valid = false;
+        } else {
+            nameMessage.style.display = 'none';
+        }
+
+        // 생일 체크
+        if (!birthDate.checkValidity()) {
+            birthDateMessage.style.display = 'inline';
+            birthDateMessage.style.color = "red";
+            birthDateMessage.textContent = "생년월일을 입력하세요.";
+            valid = false;
+        } else {
+            birthDateMessage.style.display = 'none';
+        }
+
+        // 성별 체크
+        if (gender.value == "") {
+            genderMessage.style.display = 'inline';
+            genderMessage.style.color = "red";
+            genderMessage.textContent = "성별을 확인해주세요.";
+            valid = false;
+        } else {
+            genderMessage.style.display = 'none';
+        }
+
+        // 전화번호 체크
+        if (!phone.checkValidity()) {
+            phoneMessage.style.display = 'inline';
+            phoneMessage.style.color = 'red';
+            phoneMessage.textContent = '전화번호 형식이 올바르지 않습니다.';
+            valid = false;
+        } else {
+            phoneMessage.style.display = 'none';
+        }
+
+        // 메인주소 체크
+        if (!address.checkValidity()) {
+            addressMessage.style.display = 'inline';
+            addressMessage.style.color = 'red';
+            addressMessage.textContent = '주소를 입력해주세요.';
+            valid = false;
+        } else {
+            addressMessage.style.display = 'none';
+        }
+
+        // 최종 확인
+        if (valid) {
+            alert('관리자 등록이 완료되었습니다. 로그인 페이지에서 로그인해 주세요.');
+            document.form.submit();
+        }
+    }
+
+    // 비밀번호 확인 버튼 클릭 이벤트
+    button.addEventListener('click',function() {
+        if (!password.checkValidity()) {
+            passwordMessage.style.display = 'inline';
+            passwordMessage.style.color = "red";
+            passwordMessage.textContent = "비밀번호 형식이 맞지 않습니다.";
+            return;
+        }
+        if (password.value !== password2.value) {
+            passwordMessage.style.display = 'inline';
+            passwordMessage.style.color = "red";
+            passwordMessage.textContent = "비밀번호가 일치하지 않습니다.";
+        } else {
+            passwordMessage.style.display = 'inline';
+            passwordMessage.style.color = "green";
+            passwordMessage.textContent = "비밀번호가 일치합니다.";
+        }
+    });
+
+</script>
+<!-- 다음 주소 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function execDaumPostcode() {
+      new daum.Postcode({
+        oncomplete: function(data) {
+          let addr = '';
+          let extraAddr = '';
+
+          if (data.userSelectedType === 'R') {
+            addr = data.roadAddress;
+          } else {
+            addr = data.jibunAddress;
+          }
+
+          if(data.userSelectedType === 'R'){
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+              extraAddr += data.bname;
+            }
+
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+
+            if(extraAddr !== ''){
+              extraAddr = ' (' + extraAddr + ')';
+            }
+          }
+
+          const fullAddr = addr + ' (' + data.zonecode + ')' + extraAddr;
+          document.getElementById("location_address").value = fullAddr;
+          document.getElementById("location_detailAddress").focus();
+        }
+      }).open();
+    }
+</script>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ForDog - 수정 완료</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+    background-color: var(--hover-bg);
+    color: var(--highlight);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    user-select: none;
+    }
+
+    .message {
+    font-size: 20px;
+    font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+<div class="message">입력 처리 중입니다...</div>
+
+<script th:inline="javascript">
+  var memberNo = [[${memberNo}]];
+
+  function enterFinish() {
+      setTimeout(function () {
+        alert("성공적으로 처리되었습니다.");
+
+          if (memberNo === 0) {
+              location.href = "/";
+          } else {
+              location.href = "/mypage/course";
+          }
+      }, 700);
+  }
+
+  enterFinish();
+</script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<!-- 전체 레이아웃 -->
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/mainAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="dashboard">
+
+        <!-- 메시지 -->
+<!--        <div class="messages">-->
+<!--            <h2>🔔 알림 / 메시지</h2>-->
+<!--            <ul>-->
+<!--                <li>오늘 5건의 새로운 알림이 있습니다.</li>-->
+<!--                <li>1건의 상담 신청이 처리되었습니다.</li>-->
+<!--            </ul>-->
+<!--        </div>-->
+
+        <!-- 환영 박스 -->
+                <div class="welcome-box">
+                    <h2>환영합니다, 관리자님 👋</h2>
+                    <p>ForDog Management 시스템에 오신 것을 환영합니다.</p>
+                </div>
+
+        <!-- 주요 카드 -->
+        <!--<div class="cards">
+            <div class="card">
+                <h3>회원 관리</h3>
+                <p>회원 정보를 확인하고 관리할 수 있습니다.</p>
+            </div>
+            <div class="card">
+                <h3>보호소 현황</h3>
+                <p>등록된 보호소와 동물 현황을 조회합니다.</p>
+            </div>
+            <div class="card">
+                <h3>공지사항</h3>
+                <p>최신 공지 및 업데이트를 확인하세요.</p>
+            </div>
+        </div>-->
+
+        <!-- 캘린더 -->
+        <h2 style="color: #1e73be;">📅 일정</h2>
+        <div class="calendar-container" id="calendarContainer"></div>
+
+        <!-- 가짜 차트 -->
+<!--        <div class="chart-box">-->
+<!--            📊 차트가 표시될 공간입니다.-->
+<!--        </div>-->
+
+        <!-- 통계 -->
+        <div class="stats">
+            <div class="stat-box">
+                <h2>[[${countMember}]]</h2>
+                <p>총 회원 수</p>
+            </div>
+            <div class="stat-box">
+                <h2>[[${countShelter}]]</h2>
+                <p>등록된 보호소</p>
+            </div>
+            <div class="stat-box">
+                <h2>[[${countVideo}]]</h2>
+                <p>등록된 강의 수</p>
+            </div>
+        </div>
+
+        <!-- 공지사항 -->
+        <div class="notice">
+            <div class="notice-header">
+                <h2>공지사항</h2>
+                <a class="list-link" href="/manager/homepage/notice/list">전체목록</a>
+                <a class="more-link" href="/manager/homepage/notice/chuga">+</a>
+            </div>
+
+            <div class="notice-list">
+                <ul>
+                    <li th:each="notice : ${noticeList}">
+                        <a th:href="@{|/manager/homepage/notice/view/${notice.no}|}" class="notice-item">
+                            <span class="notice-title" th:text="${notice.subject}">공지 제목</span>
+                            <span class="notice-date" th:text="${#temporals.format(notice.regiDate, 'yyyy.MM.dd')}">2025.08.25</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 최근 활동 -->
+        <!--        <div class="activity-log">-->
+        <!--            <h2>최근 활동</h2>-->
+        <!--            <ul>-->
+        <!--                <li>관리자 A님이 회원을 등록했습니다.</li>-->
+        <!--                <li>보호소 B가 새로운 동물을 추가했습니다.</li>-->
+        <!--                <li>공지사항이 업데이트되었습니다.</li>-->
+        <!--            </ul>-->
+        <!--        </div>-->
+
+
+
+        <!-- 빠른 액션 -->
+<!--        <div class="quick-actions">-->
+<!--            <button>+ 회원 추가</button>-->
+<!--            <button>+ 보호소 등록</button>-->
+<!--            <button>+ 공지 작성</button>-->
+<!--        </div>-->
+
+        <!-- 빠른 링크 -->
+<!--        <div class="quick-links">-->
+<!--            <h2>⚡ 빠른 바로가기</h2>-->
+<!--            <div class="link-buttons">-->
+<!--                <a href="/manager/member/list">회원관리</a>-->
+<!--                <a href="/manager/homepage/notice/list">공지사항</a>-->
+<!--                <a href="#">상담신청</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+    </div>
+</div>
+</body>
+<script>
+    function generateCalendar(year, month) {
+      const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월",
+                          "7월", "8월", "9월", "10월", "11월", "12월"];
+
+      const firstDay = new Date(year, month, 1).getDay(); // 첫 날의 요일
+      const lastDate = new Date(year, month + 1, 0).getDate(); // 마지막 날짜
+
+      let calendarHTML = `
+        <div class="calendar-box">
+          <h2>${monthNames[month]} ${year}</h2>
+          <br>
+          <table>
+            <tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>
+            <tr>
+      `;
+
+      // 빈 칸 채우기
+      for (let i = 0; i < firstDay; i++) {
+        calendarHTML += "<td></td>";
+      }
+
+      // 날짜 채우기
+      for (let day = 1; day <= lastDate; day++) {
+        calendarHTML += `<td>${day}</td>`;
+        if ((firstDay + day) % 7 === 0) {
+          calendarHTML += "</tr><tr>";
+        }
+      }
+
+      calendarHTML += "</tr></table></div>";
+      return calendarHTML;
+    }
+
+    // 현재 날짜 기준
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth(); // 0 = January
+
+    const calendarContainer = document.getElementById("calendarContainer");
+
+    // 이전 달
+    let prevMonth = new Date(currentYear, currentMonth - 1);
+    calendarContainer.innerHTML += generateCalendar(prevMonth.getFullYear(), prevMonth.getMonth());
+
+    // 현재 달
+    calendarContainer.innerHTML += generateCalendar(currentYear, currentMonth);
+
+    // 다음 달
+    let nextMonth = new Date(currentYear, currentMonth + 1);
+    calendarContainer.innerHTML += generateCalendar(nextMonth.getFullYear(), nextMonth.getMonth());
+
+</script>
+</html>

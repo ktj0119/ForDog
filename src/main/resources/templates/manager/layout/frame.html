@@ -1,0 +1,40 @@
+<!--메뉴 링크 추가(TJ)-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학습관리시스템</title>
+    <link rel="stylesheet" th:href="@{/css/managerLayout.css}">
+</head>
+<body>
+<div th:fragment="frame">
+    <!-- 상단 헤더 -->
+    <div class="header">
+        <div class="logo">
+            <a th:href="@{/manager}">
+                <span class="logo-text">교육통합관리시스템</span>
+            </a>
+        </div>
+        <div class="nav">
+            <ul class="menu">
+                <li><a href="/manager/member/list">회원정보관리</a></li>
+                <li><a href="/manager/contents/media/list">컨텐츠관리</a></li>
+                <li><a href="/manager/homepage/notice/list">홈페이지관리</a></li>
+            </ul>
+        </div>
+        <div class="util">
+            <span>[[${session.adminName}]]님</span>
+            <a href="#" onclick="logout();">로그아웃</a>
+        </div>
+    </div>
+    <!-- 로그아웃 스크립트 -->
+    <script>
+        function logout() {
+            if(confirm("로그아웃하시겠습니까?")) {
+                alert("로그아웃 되셨습니다.");
+                location.href="/manager/login";
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

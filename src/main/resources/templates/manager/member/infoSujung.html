@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Member</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+</head>
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+
+<div class="layout">
+    <!-- 좌측 사이드 -->
+    <div th:replace="manager/layout/memberAside :: asideMenu"></div>
+
+    <!-- 본문 -->
+    <div class="content">
+        <div class="form-container">
+            <h2>회원정보 수정</h2>
+            <form id="form" name="form" method="post" action="/manager/member/infoSujungProc">
+                <input type="hidden" name="no" th:value="${returnDTO.no}">
+                <div class="vertical-table">
+                <table>
+                    <tr>
+                        <th>이름</th>
+                        <td>
+                            <input type="hidden" name="name" th:value="${returnDTO.name}">[[${returnDTO.name}]]
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>아이디</th>
+                        <td>
+                            <input type="hidden" name="id" th:value="${returnDTO.id}">[[${returnDTO.id}]]
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>성별</th>
+                        <td>
+                            <input type="hidden" name="gender" th:value="${returnDTO.gender}">[[${returnDTO.gender}]]
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>생년월일</th>
+                        <td>
+                            <input type="hidden" name="birthDate" th:value="${returnDTO.birthDate}">[[${returnDTO.birthDate}]]
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>전화번호</th>
+                        <td><input type="text" name="phone" th:value="${returnDTO.phone}" required></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td>
+                            <input type="text" id="location_address" name="addressMain" placeholder="주소" th:value="${returnDTO.addressMain}" required readonly>
+                            <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" style="cursor: pointer;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>상세주소</th>
+                        <td>
+                            <input type="text" id="location_detailAddress" name="addressDetail" placeholder="상세주소" th:value="${returnDTO.addressDetail}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호 확인</th>
+                        <td><input type="password" name="pwd" required></td>
+                    </tr>
+                </table>
+                </div>
+                <div class="btn-box">
+                    <button type="button" onclick="sujung();">수정</button>
+                    <button type="button" th:onclick="location.href='/manager/member/view/' + [[${returnDTO.no}]];">취소</button>
+                </div>
+            </form>
+
+            <!-- 에러 처리 -->
+            <div th:if="${error}">
+                <script th:inline="javascript">
+                    alert([[${error}]]);
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('form');
+
+    function sujung() {
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            alert('입력되지 않은 정보가 있습니다. 다시 입력해 주세요.');
+        }
+    }
+</script>
+
+<!-- 다음 주소 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function execDaumPostcode() {
+      new daum.Postcode({
+        oncomplete: function(data) {
+          let addr = '';
+          let extraAddr = '';
+
+          if (data.userSelectedType === 'R') {
+            addr = data.roadAddress;
+          } else {
+            addr = data.jibunAddress;
+          }
+
+          if(data.userSelectedType === 'R'){
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+              extraAddr += data.bname;
+            }
+
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+
+            if(extraAddr !== ''){
+              extraAddr = ' (' + extraAddr + ')';
+            }
+          }
+
+          const fullAddr = addr + ' (' + data.zonecode + ')' + extraAddr;
+          document.getElementById("location_address").value = fullAddr;
+          document.getElementById("location_detailAddress").focus();
+        }
+      }).open();
+    }
+</script>
+</body>
+</html>

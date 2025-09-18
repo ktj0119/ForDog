@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog - 미디어 강의시험</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+          --accent: #DFA316;
+          --accent-dark: #B07F10;
+          --highlight: #694230;
+          --highlight-dark: #4F3225;
+          --text-bright: #fff;
+          --text-dark: #4b4b4b;
+          --hover-bg: #DCD8C8;
+        }
+
+        body {
+          padding-top: 0;
+          background-color: #fff;
+          margin: 0;
+          padding: 20px;
+          color: var(--text:dark);
+        }
+
+        .test-box {
+          max-width: 1000px;
+          margin: 40px auto;
+          background: #fff;
+          border-radius: 12px;
+        }
+
+        .test-box h1 {
+          font-size: 24px;
+          margin-bottom: 25px;
+          padding-bottom: 20px;
+          border-bottom: 1px solid var(--highlight);
+          color: var(--highlight);
+          text-align: center;
+          font-weight: bold;
+        }
+
+        .quiz-item {
+          margin-bottom: 25px;
+          padding: 20px;
+          border-radius: 10px;
+          background: var(--hover-bg);
+        }
+
+        .quiz-item h2 {
+          font-size: 20px;
+          color: var(--highlight);
+          margin: 0;
+          margin-bottom: 10px;
+        }
+
+        .quiz-item p {
+          font-size: 16px;
+          margin: 10px 0;
+          line-height: 1.4;
+        }
+
+        .answer-box {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .answer-box input {
+          width: 40px;
+          height: 40px;
+          text-align: center;
+          font-size: 16px;
+          border-radius: 8px;
+          transition: all 0.2s ease;
+          border: none;
+        }
+
+        .answer-box input:focus {
+          border-color: var(--highlight);
+          outline: 1px solid var(--highlight);
+        }
+
+        .button-group {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          margin-top: 20px;
+        }
+
+        .button-group button {
+          padding: 10px 20px;
+          font-size: 16px;
+          border: none;
+          border-radius: 25px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: all 0.25s ease;
+        }
+
+        .button-group button[type="submit"] {
+          background: var(--highlight);
+          color: white;
+        }
+
+        .button-group button[type="submit"]:hover {
+          background: var(--highlight-dark);
+        }
+
+        .button-group .exit {
+          background: #efefef;
+          color: var(--text-dark);
+        }
+
+        .button-group .exit:hover {
+          background: var(--text:dark);
+        }
+    </style>
+</head>
+<body>
+
+<div class="test-box">
+    <h1><i class="fa-solid fa-file-pen"></i> 과정명: [[${mediaGroupDTO.name}]]</h1>
+
+    <form name="testForm" method="post" action="/edu/media/testProc">
+        <input type="hidden" name="mediaGroupNo" th:value="${mediaGroupDTO.no}">
+
+        <div th:each="randomQuiz, loop : ${randomQuizList}" class="quiz-item">
+            <input type="hidden" th:name="|quizNoList[${loop.index}]|" th:value="${randomQuiz.no}"/>
+            <h2>Q[[${loop.index + 1}]].</h2>
+            <p>[[${randomQuiz.question}]]</p>
+            <div class="answer-box">
+                <div th:each="i : ${#numbers.sequence(1, randomQuiz.answer.trim().length())}">
+                    <input type="text" maxlength="1" th:name="|answers[${loop.index}][${i - 1}]|"/>
+                </div>
+            </div>
+        </div>
+        <div class="button-group">
+            <button type="submit">제출하기</button>
+            <button type="button" class="exit" onclick="window.close()">나가기</button>
+        </div>
+    </form>
+</div>
+
+<!-- 시험 처리 -->
+<script th:inline="javascript">
+    var result = [[${result}]];
+    if(result === 'success') {
+      alert('본 과정의 점수가 60점 이상으로 성공적으로 수료하였습니다.');
+      window.close();
+    } else if(result === 'fail') {
+      if (confirm('본 과정의 점수가 60점 미만으로, 수료 조건을 충족하지 못하였습니다.\n\n' +
+        '다시 시험에 응시하겠습니까? ' +
+        '취소시 이전 화면으로 이동합니다.')) {
+      } else {
+        alert('취소되었습니다.');
+        window.location.href = '/edu/media/video/' + [[${mediaGroupDTO.no}]];
+      }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+/* 사이드바 */
+.sidebar {
+    width: 200px;
+    height: 100%;
+    background: var(--hover-bg);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h3 {
+    color: var(--text-dark);
+    font-weight: bold;
+    padding: 10px;
+    transition: background 0.2s;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    padding: 10px;
+    transition: background 0.2s;
+}
+
+.sidebar a:hover {
+    color: var(--accent);
+}

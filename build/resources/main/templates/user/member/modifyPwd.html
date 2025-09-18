@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>ForDog - 비밀번호 재설정</title>
+  <link rel="stylesheet" th:href="@{/css/userInterface.css}" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1; /* 푸터 밀어내기 */
+    }
+
+    .container {
+      max-width: 1020px;
+      margin: 80px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      font-family: 'NanumSquare', 'Malgun Gothic', sans-serif;
+      color: #333;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      user-select: text;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff944d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #e67d33;
+    }
+
+    .success-message {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+      display: none;
+      user-select: text;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      user-select: text;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+  <div class="container">
+    <h2>비밀번호 재설정</h2>
+    <input type="password" id="new-password" placeholder="새 비밀번호 입력" />
+    <input type="password" id="confirm-password" placeholder="비밀번호 확인" />
+    <button id="reset-btn">변경</button>
+    <div class="error-message" id="error-msg"></div>
+    <div class="success-message" id="success-msg">
+      비밀번호 변경이 완료되었습니다. <a href="/login.html">로그인하기</a>
+    </div>
+  </div>
+</main>
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<script>
+  const resetBtn = document.getElementById('reset-btn');
+  const newPassword = document.getElementById('new-password');
+  const confirmPassword = document.getElementById('confirm-password');
+  const errorMsg = document.getElementById('error-msg');
+  const successMsg = document.getElementById('success-msg');
+
+  resetBtn.addEventListener('click', () => {
+    errorMsg.textContent = '';
+    successMsg.style.display = 'none';
+
+    const pw = newPassword.value.trim();
+    const pwConfirm = confirmPassword.value.trim();
+
+    if (!pw || !pwConfirm) {
+      errorMsg.textContent = '비밀번호와 확인을 모두 입력해주세요.';
+      return;
+    }
+
+    if (pw !== pwConfirm) {
+      errorMsg.textContent = '비밀번호가 일치하지 않습니다.';
+      return;
+    }
+
+    // 여기에 실제 비밀번호 변경 요청 로직 추가 필요 (AJAX 등)
+
+    successMsg.style.display = 'block';
+    newPassword.value = '';
+    confirmPassword.value = '';
+  });
+</script>
+</body>
+</html>

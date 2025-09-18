@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog Management Member - 상세보기</title>
+    <link rel="stylesheet" th:href="@{/css/managerMain.css}">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+</head>
+
+<body>
+<div th:replace="manager/layout/frame :: frame"></div>
+<div class="layout">
+    <div th:replace="manager/layout/memberAside :: asideMenu"></div>
+    <div class="content">
+        <div class="form-container">
+            <h2>회원상세정보</h2>
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">회원정보</a></li>
+                    <li><a href="#tabs-2">수강목록</a></li>
+                    <li><a href="#tabs-3">수료확인</a></li>
+                </ul>
+
+                <!-- 회원정보 탭 -->
+                <div id="tabs-1">
+                    <div class="vertical-table">
+                    <table>
+                        <tr>
+                            <th>이름</th>
+                            <td>[[${returnDTO.name}]]</td>
+                        </tr>
+                        <tr>
+                            <th>아이디</th>
+                            <td>[[${returnDTO.id}]]</td>
+                        </tr>
+                        <tr>
+                            <th>성별</th>
+                            <td>[[${returnDTO.gender}]]</td>
+                        </tr>
+                        <tr>
+                            <th>생년월일</th>
+                            <td>[[${returnDTO.birthDate}]]</td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td>[[${returnDTO.phone}]]</td>
+                        </tr>
+                        <tr>
+                            <th>주소</th>
+                            <td>[[${returnDTO.addressMain}]] [[${returnDTO.addressDetail}]]</td>
+                        </tr>
+                        <tr>
+                            <th>가입일</th>
+                            <td th:text="${#temporals.format(returnDTO.regiDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        </tr>
+                    </table>
+                    </div>
+
+                    <!-- 버튼 영역 -->
+                    <div class="btn-box">
+                        <button type="button" class="btn-link" onclick="location.href='/manager/member/list'">목록</button>
+
+                        <button type="button" class="btn-link"
+                                th:onclick="location.href='/manager/member/infoSujung/[[${returnDTO.no}]]'">개인정보수정</button>
+
+                        <button type="button" class="btn-link btn-cancel" onclick="sakje();">삭제</button>
+
+                    </div>
+                </div>
+
+                <!-- 수강목록 탭 -->
+                <div id="tabs-2">
+                    <!-- TODO: 수강목록 내용 -->
+                    <div th:each="mediaRegisterDTO, loop : ${regiList}">
+                        <table class="toggle" style="text-align: center;" th:attr="data-index=${loop.index}">
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>미디어그룹</th>
+                                <th>수강신청일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <span class="arrow"></span>  [[${loop.count}]]
+                                </td>
+                                <td>[[${mediaRegisterDTO.mediaGroup.name}]]</td>
+                                <td th:text="${#temporals.format(mediaRegisterDTO.statusDate, 'yyyy-MM-dd')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <th:block th:if="${videoProcessMap != null and videoProcessMap[mediaRegisterDTO.mediaGroup.no] != null}">
+                            <table class="show" style="text-align: center; display: none;" th:attr="data-index=${loop.index}">
+                                <thead>
+                                <tr>
+                                    <th>영상제목</th>
+                                    <th>진행도</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="videoProcess : ${videoProcessMap[mediaRegisterDTO.mediaGroup.no]}">
+                                    <td th:text="${videoProcess.mediaVideo != null} ? ${videoProcess.mediaVideo.subject} : '제목 없음'"></td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; justify-content: center; width: 100%; gap: 20px;">
+                                            <!-- 바깥 회색 바 -->
+                                            <div style="width: 50%; height: 30px; background-color: #ddd;">
+                                                <!-- 안쪽 파란 바 -->
+                                                <div th:style="'width:' + (${videoProcess.playTime != null ? videoProcess.playTime * 100 / videoProcess.mediaVideo.mediaLength : 0}) + '%; height: 100%; background-color: #1e73be;'">
+                                                </div>
+                                            </div>
+
+                                            <!-- 진행률 텍스트 -->
+                                            <span th:text="${videoProcess.playTime != null ? (videoProcess.playTime * 100 / videoProcess.mediaVideo.mediaLength) + '%' : '0%'}"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </th:block>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+
+                <!-- 수료확인 탭 -->
+                <div id="tabs-3">
+                    <!-- TODO: 수료확인 내용 -->
+                    <div th:if="${completList.size() == 0}">
+                        <div>수강 완료한 미디어가 없습니다.</div>
+                    </div>
+                    <div th:unless="${completList.size() == 0}">
+                        <div th:each="mediaCompletionDTO, loop : ${completList}">
+                            <table style="text-align: center;">
+                                <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>미디어그룹</th>
+                                    <th>수강완료일</th>
+                                    <th>수료증</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <td>[[${loop.count}]]</td>
+                                <td>[[${mediaCompletionDTO.mediaGroup.name}]]</td>
+                                <td th:text="${#temporals.format(mediaCompletionDTO.statusDate, 'yyyy-MM-dd')}">
+                                </td>
+                                <td>
+                                    <button type="button"
+                                            th:onclick="|window.open('/manager/member/compltePrint/${mediaCompletionDTO.no}', '_blank')|">
+                                        출력
+                                    </button>
+                                </td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sakje() {
+        if (confirm("삭제하시겠습니까?")) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/manager/member/sakjeProc';  // 수정됨
+
+            const inputNo = document.createElement('input');
+            inputNo.type = 'hidden';
+            inputNo.name = 'no';
+            inputNo.value = '[[${returnDTO.no}]]';
+            form.appendChild(inputNo);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+    $(document).ready(function () {
+        $("table.toggle").on("click", function () {
+            var index = $(this).data("index");
+            var $target = $("table.show[data-index='" + index + "']");
+            var $arrow = $(this).find(".arrow");
+
+            // 아코디언 하나만 열리게
+            $("table.show").not($target).hide();
+            $("table.toggle .arrow").not($arrow).removeClass("open");
+
+            // toggle 대상
+            if ($target.is(":visible")) {
+                $target.hide();
+                $arrow.removeClass("open");
+            } else {
+                $target.show();
+                $arrow.addClass("open");
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

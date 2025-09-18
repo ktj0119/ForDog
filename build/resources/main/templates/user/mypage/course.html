@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ForDog - 미디어 수강 및 수료 관리</title>
+    <link rel="stylesheet" th:href="@{/css/userInterface.css}"/>
+    <link rel="stylesheet" th:href="@{/css/userCommon.css}"/>
+    <link rel="stylesheet" th:href="@{/css/userSideBar.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        h2 {
+            margin-bottom: 30px !important;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        .status-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--hover-bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin: 0;
+            margin-bottom: 10px !important;
+        }
+
+        .card p {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--highlight);
+        }
+
+        /* 강의 아이템 */
+        .course-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-top: 30px;
+        }
+
+        .course-item h2 {
+            margin-bottom: 15px;
+        }
+
+        /* 진행 상태 2등분 */
+        .course-progress {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            text-align: center;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .course-progress > div {
+            padding: 15px 10px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .course-progress > div:last-child {
+            border-right: none;
+        }
+
+        .course-progress span:first-child {
+            font-weight: bold;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .course-progress span:last-child {
+            font-size: 16px;
+            color: var(--highlight);
+        }
+
+        /* 버튼 꽉 채우기 */
+        .course-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .course-actions button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--highlight);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .course-actions button:hover {
+            background: var(--highlight-dark);
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 / 네비게이션 -->
+<div th:replace="header/userHeader :: userHeader"></div>
+
+<!-- 메인 화면 -->
+<main>
+    <!-- 마이페이지 바 -->
+    <div th:replace="header/userSideBar :: mypageBar"></div>
+
+    <!-- 메인 -->
+    <div class="container">
+        <h2>수강 및 수료 관리</h2>
+        <div class="status-cards">
+            <div class="card">
+                <h2>수강신청</h2>
+                <p th:text="${#lists.size(mediaRegistrationList)} + ' 건'"></p>
+            </div>
+            <div class="card">
+                <h2>학습중</h2>
+                <p th:text="${#lists.size(mediaRegistrationList) - completionRateCount} + ' 건'"></p>
+            </div>
+            <div class="card">
+                <h2>학습완료</h2>
+                <p th:text="${completionRateCount} + ' 건'"></p>
+            </div>
+            <div class="card">
+                <h2>미수료</h2>
+                <p th:text="${#lists.size(mediaRegistrationList) - mediaCompletionCount} + ' 건'"></p>
+            </div>
+            <div class="card">
+                <h2>수료완료</h2>
+                <p th:text="${mediaCompletionCount} + ' 건'"></p>
+            </div>
+        </div>
+
+        <div class="course-item" th:each="registrationDTO, loop : ${mediaRegistrationList}">
+            <h3>[[${registrationDTO.mediaGroup.name}]]</h3>
+
+            <div class="course-progress">
+                <div>
+                    <span>이수율</span>
+                    <span>[[${completionRateList[loop.index]}]]%</span>
+                </div>
+                <div>
+                    <span>수료증</span>
+                    <span th:text="${mediaCompletionList[loop.index] != null ? '수료' : '미수료'}"></span>
+                </div>
+            </div>
+
+            <div class="course-actions">
+                <button type="button" class="open-video"
+                        th:data-media-group-no="${registrationDTO.mediaGroup.no}">강의시청</button>
+
+                <button th:if="${completionRateList[loop.index] == 100 && mediaCompletionList[loop.index] == null}"
+                        type="button" class="open-test"
+                        th:data-media-group-no="${registrationDTO.mediaGroup.no}">시험보기</button>
+
+                <button type="button" class="open-certificate"
+                        th:data-media-group-no="${registrationDTO.mediaGroup.no}"
+                        th:data-member-no="${memberNo}"
+                        th:if="${mediaCompletionList[loop.index] != null}">수료증 출력</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- 푸터 -->
+<div th:replace="header/userFooter :: userFooter"></div>
+
+<!-- 강의시청 -->
+<script>
+    const openVideo = document.querySelectorAll('.open-video');
+
+    for (let i = 0; i < openVideo.length; i++) {
+        openVideo[i].onclick = function() {
+            const mediaGroupNo = this.dataset.mediaGroupNo;
+            const popup = window.open(
+                '/edu/media/video/' + mediaGroupNo,
+                'fullScreenPopup',
+                'width=' + screen.width + ',height=' + screen.height + ',left=0,top=0'
+            );
+
+            popup.onload = function() {
+                const video = popup.document.querySelector('video');
+                if (video && video.requestFullscreen) {
+                    video.requestFullscreen();
+                }
+            };
+        };
+    }
+</script>
+
+<!-- 시험보기 -->
+<script>
+    const openTest = document.querySelectorAll('.open-test');
+
+    for (let i = 0; i < openTest.length; i++) {
+        openTest[i].onclick = function() {
+            const mediaGroupNo = this.dataset.mediaGroupNo;
+            const popup = window.open(
+                '/edu/media/test/' + mediaGroupNo,
+                'testPopup',
+                'width=' + screen.width + ',height=' + screen.height + ',left=0,top=0'
+            );
+        };
+    }
+</script>
+
+<!-- 수료증 출력 -->
+<script>
+    const openCertificate = document.querySelectorAll('.open-certificate');
+
+    for (let i = 0; i < openCertificate.length; i++) {
+        openCertificate[i].onclick = function () {
+            const mediaGroupNo = this.dataset.mediaGroupNo;
+            const memberNo = this.dataset.memberNo;
+
+            const popup = window.open('', 'certificatePopup',
+                'width=560,height=840,left=300,top=100');
+
+            const html = `
+                <html>
+                <body>
+                    <form id="certForm" method="post" action="/mypage/print">
+                        <input type="hidden" name="mediaGroupNo" value="${mediaGroupNo}">
+                    </form>
+                    <script>
+                        document.getElementById('certForm').submit();
+                    <\/script>
+                </body>
+                </html>
+            `;
+            popup.document.write(html);
+            popup.document.close();
+        };
+    }
+</script>
+</body>
+</html>

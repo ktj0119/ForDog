@@ -1,0 +1,19 @@
+package com.example.forDog.controller.user;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("member/")
+@RequiredArgsConstructor
+public class MemberController {
+
+    private String folderName = "user/member/";
+
+    @RequestMapping("modifyPwd")
+    public String modifyPwd() {
+        return folderName + "modifyPwd";
+    }
+
+}
