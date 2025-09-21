@@ -65,7 +65,6 @@ public class MediaGroupController {
 
     @RequestMapping("/sujungProc")
     public String sujungProc(MediaGroupDTO mediaGroupDTO) {
-        mediaGroupDTO.setIsActive(false);
         service.setUpdate(mediaGroupDTO);
         return "redirect:/manager/contents/mediaGroup/view/" + mediaGroupDTO.getNo();
     }

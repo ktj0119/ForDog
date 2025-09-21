@@ -290,8 +290,9 @@
         </tr>
         </thead>
         <tbody>
-          <tr th:each="shelterDTO, loop:${list}">
-            <td>[[${shelterDTO.no}]]</td>
+          <tr th:each="shelterDTO, iterStat : ${paging.content}">
+            <!-- 전체 번호 계산: 페이지 첫 항목 번호 + 현재 항목 번호 -->
+            <td th:text="${paging.pageable.offset + iterStat.index + 1}"></td>
             <td>[[${shelterDTO.region}]]</td>
             <td>[[${shelterDTO.shelterName}]]</td>
             <td>[[${shelterDTO.phone}]]</td>

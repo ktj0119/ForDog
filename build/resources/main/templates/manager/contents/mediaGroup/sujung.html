@@ -25,6 +25,16 @@
                         <td><input type="text" name="name" th:value="${returnDTO.name}" required></td>
                     </tr>
                     <tr>
+                        <th>활성화 여부</th>
+                        <td>
+                            <select name="isActive">
+                                <option value="" th:selected="${returnDTO.isActive == null}">선택</option>
+                                <option value="true" th:selected="${returnDTO.isActive == true}">활성화</option>
+                                <option value="false" th:selected="${returnDTO.isActive == false}">비활성화</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <th>설명</th>
                         <td><textarea name="description" required>[[${returnDTO.description}]]</textarea></td>
                     </tr>
